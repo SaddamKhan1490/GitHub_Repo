@@ -13,15 +13,15 @@ object WordCount {
   
       val conf = new SparkConf().setAppName("App1").setMaster("local")
       val sc = new SparkContext(conf)
-      println("Start")
-      //If You are in Spark Cluster the povide HDFS Path instead of Local Path
+      println("Start...")
+      //If We are in Spark Cluster then povide HDFS Path instead of Local Path
       val textFile = sc.textFile("C:/Users/Lenovo/Desktop/Input_Dataset/Sample.txt") 
       val counts = textFile.flatMap(line => line.split(" "))
                  .map(word => (word, 1))
                  .reduceByKey(_ + _)
-      //If You are in Spark Cluster the povide HDFS Path instead of Local Path
+      //If We are in Spark Cluster then povide HDFS Path instead of Local Path
       counts.saveAsTextFile("C:/Users/Lenovo/Desktop/Output_Dataset/")
           
-      println("End")
+      println("End...")
   }
 }
