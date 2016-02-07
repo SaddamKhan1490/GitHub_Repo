@@ -30,10 +30,10 @@ object textSearch {
       errors.count()
       
       // Counting errors MySQL
-      errors.filter(col("line").like("%MySQL%")).count()
+      errors.filter(col("line").like("%ClassNotFound%")).count()
        
       // Fetching MySQL errors as an array of strings
-      errors.filter(col("line").like("%MySQL%")).collect()
+      errors.filter(col("line").like("%ClassNotFound%")).collect()
       
       println("End...")
   }
