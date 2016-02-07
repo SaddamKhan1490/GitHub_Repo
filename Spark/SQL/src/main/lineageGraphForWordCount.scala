@@ -16,17 +16,19 @@ object lineageGraph {
    
    //println("Start...")
 
-   val Lines = sc.textFile(args(1))
-   println("Parent for Lines = "+ Lines.toDebugString() )
+   
+   //If We are in Spark Cluster then povide HDFS Path instead of Local Path
+   val Lines = sc.textFile("C:/Users/Lenovo/Desktop/Input_Dataset/Sample.txt") 
+   println("Parent for Lines = "+ Lines.toDebugString() + " i.e.Here, Lines is HadoopBaseRDD" + "\n")
 
    val Split =  Lines.flatMap(word => (word,1))
-   println("Parent for wordMap = "+ Split.toDebugString() )
+   println("Parent for Split = "+ Split.toDebugString() )
    
    val Words = Lines.map(line=>line.split(" "))
-   println("Parent for wordRDD = "+ Words.toDebugString() )
+   println("Parent for Words = "+ Words.toDebugString() )
 
    val Count =  Words.reduceByKey(_+_)
-   println("Parent for wordCount = "+ Count.toDebugString() )
+   println("Parent for Count = "+ Count.toDebugString() )
     
    Count.collect.foreach(println)
    
