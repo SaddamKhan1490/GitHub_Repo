@@ -2,15 +2,16 @@
  * Date :-  02/07/16.
  * Author :- Vidya
  */
-   
-  import  org.apache.spark.SparkContext
+ 
+  import org.apache.log4j.{Level, Logger}
+  import org.apache.spark.SparkContext
   import org.apache.spark.SparkContext.__
   import org.apache.spark.SparkConf
   import org.apache.spark.rdd.JdbcRDD
   import java.sql.{connection, DriverManager,ResultSet}
 
 
-  object JdbcRddeExample {
+  object jdbcRddExample {
     def main(args: Array[String]) {
     
         // Connection String    
