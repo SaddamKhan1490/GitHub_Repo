@@ -18,7 +18,7 @@
         VAL URL = "jdbc:teradata://hdpserver.it.com/demo"
         val username = "demo"
         val password = "Spark"
-        Class.forName("com.mysql.jdbc.Driver").newInstance
+        Class.forName("com.teradata.jdbc.Driver").newInstance
         // Creating & Configuring Spark Context
         val conf = new SparkConf().setAppName("App1").setMaster("local[2]").set("spark.executor.memory",1)
         val sc = new SparkContext(conf)
