@@ -26,7 +26,7 @@
         // Fetching data from Database
         val myRDD = new JdbcRDD(sc,() => DriverManager.getConnection(url,username,password),
         "select first_name, last_name, gender from person limit ?,?",
-        3,5,1,r => r.getString("last_name) + "," +r.getString("first_name"))
+        3,5,1,r => r.getString("last_name") + "," +r.getString("first_name"))
         // Displaying the content
         myRDD.foreach(println)
         // Saving the content inside Text File
