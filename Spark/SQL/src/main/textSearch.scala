@@ -17,7 +17,7 @@ object textSearch {
       
       println("Start...")
       
-      val textFile = sc.textFile("C:/Users/Lenovo/Desktop/Dataset")
+      val textFile = sc.textFile("C:/Users/Lenovo/Desktop/Dataset.txt")
       
       // Create a DataFrame
       val df = textFile.toDF("line")
