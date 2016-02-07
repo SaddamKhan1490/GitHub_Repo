@@ -22,7 +22,7 @@
       // Creating Case Class Records to hold (Key, Value) pair
       case class Record(key: Int, value: String)
         
-      // Copy kv1.txt file from classpath to temporary directory
+      // Copy Sample.txt file from classpath to temporary directory
       val HStream = hiveOnSparkSQL.getClass.getResourceAsStream("C:/Users/Lenovo/Desktop/Dataset/Sample.txt")
       val HFile = File.createTempFile("HStream", "txt")
       HFile.deleteOnExit()
