@@ -55,8 +55,8 @@
     // Write out an RDD as a parquet file.
     df.write.parquet("pair.parquet")
 
-    // Read in parquet file.  Parquet files are self-describing so the schmema is preserved.
-    // If You are in Spark Cluster the povide HDFS Path instead of Local Path
+    // Reading in parquet file.  Parquet files are self-describing so the schmema is preserved.
+    // If we are in Spark Cluster the povide HDFS Path instead of Local Path
     val parquetFile = sqlContext.read.parquet("C:/Users/Lenovo/Desktop/Dataset/pair.parquet")
 
     // Queries can be run using the DSL on parequet files just like the original RDD.
