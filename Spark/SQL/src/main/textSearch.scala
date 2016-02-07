@@ -17,21 +17,22 @@ object textSearch {
       
       println("Start...")
       
+      // Creating RDD
       val textFile = sc.textFile("C:/Users/Lenovo/Desktop/Dataset.txt")
       
-      // Create a DataFrame
+      // Creating a DataFrame
       val df = textFile.toDF("line")
       
+      // Matching the Search Pattern using Regex i.e. Regural Expressions
       val errors = df.filter(col("line").like("%ERROR%"))
        
-      // Count all the error
+      // Counting all the error
       errors.count()
-       
       
-      // Count errors MySQL
+      // Counting errors MySQL
       errors.filter(col("line").like("%MySQL%")).count()
        
-      // Fetches MySQL errors as an array of strings
+      // Fetching MySQL errors as an array of strings
       errors.filter(col("line").like("%MySQL%")).collect()
       
       println("End...")
