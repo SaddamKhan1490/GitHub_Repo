@@ -14,10 +14,11 @@ object lineageGraph {
    val conf = new SparkConf().setAppName("Lineage-Demo").setMaster(args(0))
    val sc: SparkContext = new SparkContext(conf)
    
-   //println("Start...")
+   println("Start...")
 
    
-   //If We are in Spark Cluster then povide HDFS Path instead of Local Path
+   // If We are in Spark Cluster then povide HDFS Path instead of Local Path
+   // Here we can also read data from JSON, Parquet or any other file format
    val Lines = sc.textFile("C:/Users/Lenovo/Desktop/Input_Dataset/Sample.txt") 
    println("Parent for Lines = "+ Lines.toDebugString() + " i.e.Here, Lines is HadoopBaseRDD" + "\n")
 
