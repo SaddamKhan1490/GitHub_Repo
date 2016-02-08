@@ -10,10 +10,9 @@ import org.apache.spark.sql.functions.max
 import sqlCtx.implicits._
 
 
-object LogisticRegressionSummaryExample {
-
+object logisticRegressionSummary {
   def main(args: Array[String]): Unit = {
-    val conf = new SparkConf().setAppName("LogisticRegressionSummaryExample")
+    val conf = new SparkConf().setAppName("LogisticRegressionSummary")
     val sc = new SparkContext(conf)
     val sqlCtx = new SQLContext(sc)
     println("Start...")
@@ -30,7 +29,7 @@ object LogisticRegressionSummaryExample {
     // Extracting the summary from the returned LogisticRegressionModel 
     val trainingSummary = lrModel.summary
 
-    // Obtaining the objective per iteration.
+    // Obtaining the objective history per iteration.
     val objectiveHistory = trainingSummary.objectiveHistory
     objectiveHistory.foreach(loss => println(loss))
 
