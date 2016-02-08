@@ -12,21 +12,13 @@ import scala.collection.mutable
 import scala.language.reflectiveCalls
 import scopt.OptionParser
 
+case class Params(input: String = null, testInput: String = "", dataFormat: String = "text", regParam: Double = 0.0,  elasticNetParam: Double = 0.0,  maxIter: Int = 100, tol: Double = 1E-6, fracTest: Double = 0.2) extends AbstractParams[Params]
+
 object linearRegression {
-
-  case class Params(
-      input: String = null,
-      testInput: String = "",
-      dataFormat: String = "libsvm",
-      regParam: Double = 0.0,
-      elasticNetParam: Double = 0.0,
-      maxIter: Int = 100,
-      tol: Double = 1E-6,
-      fracTest: Double = 0.2) extends AbstractParams[Params]
-
   def main(args: Array[String]) {
     val defaultParams = Params()
 
+    // Creating the Parser
     val parser = new OptionParser[Params]("LinearRegressionExample") {
       head("LinearRegressionExample: an example Linear Regression with Elastic-Net app.")
       opt[Double]("regParam").text(s"regularization parameter, default: ${defaultParams.regParam}").action((x, c) => c.copy(regParam = x))
@@ -45,6 +37,8 @@ object linearRegression {
         .action((x, c) => c.copy(dataFormat = x))
       arg[String]("<input>").text("input path to labeled examples").required()
         .action((x, c) => c.copy(input = x))
+        
+      // Verifying the config parameter
       checkConfig { params =>
         if (params.fracTest < 0 || params.fracTest >= 1) {
           failure(s"fracTest ${params.fracTest} value incorrect; should be in [0,1).")
