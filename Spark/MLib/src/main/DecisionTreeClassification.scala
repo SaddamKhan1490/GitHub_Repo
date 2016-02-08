@@ -23,7 +23,7 @@ object decisionTreeClassificationExample {
     val data = sqlContext.read.format("text").load("C:/Users/Lenovo/Desktop/sd.txt")
 
     // Indexing labels, and Adding metadata to the label column.
-    // Fit on whole dataset to include all labels in index.
+    // Fitting whole dataset to include all labels in index.
     val labelIndexer = new StringIndexer().setInputCol("label").setOutputCol("indexedLabel").fit(data)
     
     // Automatically identifying categorical features, and indexing them.
