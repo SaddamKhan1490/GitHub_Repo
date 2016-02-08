@@ -12,7 +12,7 @@ import sqlCtx.implicits._
 
 object logisticRegressionSummary {
   def main(args: Array[String]): Unit = {
-    val conf = new SparkConf().setAppName("LogisticRegressionSummary")
+    val conf = new SparkConf().setAppName("LogisticRegressionSummary").setMaster("local[4]")
     val sc = new SparkContext(conf)
     val sqlCtx = new SQLContext(sc)
     
