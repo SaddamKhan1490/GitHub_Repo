@@ -15,6 +15,7 @@ object logisticRegressionSummary {
     val conf = new SparkConf().setAppName("LogisticRegressionSummary")
     val sc = new SparkContext(conf)
     val sqlCtx = new SQLContext(sc)
+    
     println("Start...")
 
     // Loading training Dataset
