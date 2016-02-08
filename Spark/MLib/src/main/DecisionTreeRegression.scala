@@ -18,6 +18,8 @@ object decisionTreeRegression {
     val sc = new SparkContext(conf)
     val sqlContext = new SQLContext(sc)
 
+    println("Start...")
+
      // If We are in Spark Cluster then povide HDFS Path instead of Local Path 
     val data = sqlContext.read.format("text").load("C:/Users/Lenovo/Desktop/sd.txt")
 
@@ -50,6 +52,8 @@ object decisionTreeRegression {
 
     val treeModel = model.stages(1).asInstanceOf[DecisionTreeRegressionModel]
     println("Learned regression tree model:\n" + treeModel.toDebugString)
-   
+  
+    println("End...")
+
   }
 }
