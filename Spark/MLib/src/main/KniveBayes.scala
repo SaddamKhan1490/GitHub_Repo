@@ -17,7 +17,7 @@ object kniveBayes {
     
     println("Start...")
   
-    //If We are in Spark Cluster then povide HDFS Path instead of Local Path 
+    // If We are in Spark Cluster then povide HDFS Path instead of Local Path 
     val data = sc.textFile("C:/Users/Lenovo/Desktop/sd.txt")
     val parsedData = data.map { line =>
                                 val parts = line.split(',')
@@ -38,8 +38,9 @@ object kniveBayes {
     println(accuracy + "(Approx)")
     
     // Save and load model
-    model.save(sc, "C:/Users/Lenovo/Desktop/Data/myNaiveBayesModel")
-    val sameModel = NaiveBayesModel.load(sc, "C:/Users/Lenovo/Desktop/Data/myNaiveBayesModel")
+    // If We are in Spark Cluster then povide HDFS Path instead of Local Path
+    model.save(sc, "C:/Users/Lenovo/Desktop/Data")
+    val sameModel = NaiveBayesModel.load(sc, "C:/Users/Lenovo/Desktop/Data")
     
     println("End...")
   }
