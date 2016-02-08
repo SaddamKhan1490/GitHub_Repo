@@ -11,7 +11,7 @@ import org.apache.spark.ml.classification.DecisionTreeClassifier
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
 import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer}
 
-object DecisionTreeClassificationExample {
+object decisionTreeClassificationExample {
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf().setAppName("DecisionTreeClassification").setMaster("local[4]")
     val sc = new SparkContext(conf)
