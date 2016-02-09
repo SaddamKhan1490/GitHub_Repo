@@ -12,7 +12,7 @@
         private static Producer<Integer, String> producer;
         private final Properties properties = new Properties();
         
-        // Initialing producer globally
+        // Initialing producer with global scope
         public producer() {
             properties.put("metadata.broker.list", "localhost:9091");
             properties.put("serializer.class", "kafka.serializer.StringEncoder");
@@ -20,7 +20,7 @@
             producer = new Producer<>(new ProducerConfig(properties));
         }
         
-        // Creating producer object to produce messages
+        // Creating new producer object to produce messages
         public static void main(String[] args) {
             new SimpleProducer();
             String topic = args[0];
