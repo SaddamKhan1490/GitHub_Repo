@@ -22,7 +22,7 @@
         
         // Creating new producer object to produce messages
         public static void main(String[] args) {
-            new SimpleProducer();
+            new producer();
             String topic = args[0];
             String msg = args[1];
             KeyedMessage<Integer, String> data = new KeyedMessage<>(topic, msg);
