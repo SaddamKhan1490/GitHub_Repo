@@ -25,7 +25,7 @@
       
       // Creating new producer object to produce messages
       public static void main(String[] args) {
-          new MultiBrokerProducer();
+          new multiBrokerProducer();
           Random random = new Random();
           String topic = args[0];
           for (long i = 0; i < 10; i++) {
