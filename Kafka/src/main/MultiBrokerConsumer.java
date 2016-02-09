@@ -49,8 +49,8 @@
             threadNumber++;
         }
 
-        try { // without this wait the subsequent shutdown happens immediately before any messages are delivered
-            Thread.sleep(10000);
+        try { 
+            Thread.sleep(10000); // Without this wait subsequent shutdown happens immediately before any messages are delivered
         } catch (InterruptedException ie) {
 
         }
