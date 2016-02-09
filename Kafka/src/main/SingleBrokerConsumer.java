@@ -36,8 +36,8 @@
           Map<String, Integer> topicCount = new HashMap<>();
           topicCount.put(topic, 1);
   
-          Map<String, List<KafkaStream<byte[], byte[]> consumerStreams = consumer.createMessageStreams(topicCount);
-          List<KafkaStream<byte[], byte[]> streams = consumerStreams.get(topic);
+          Map<String, List<KafkaStream<byte[], byte[]>>> consumerStreams = consumer.createMessageStreams(topicCount);
+          List<KafkaStream<byte[], byte[]>> streams = consumerStreams.get(topic);
           for (final KafkaStream stream : streams) {
               ConsumerIterator<byte[], byte[]> it = stream.iterator();
               while (it.hasNext()) {
