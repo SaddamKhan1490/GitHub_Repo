@@ -62,7 +62,7 @@
         }
     }
     
-    // Creating new consumer object to consume messages
+    // Creating new consumer objects to consume messages
     public static void main(String[] args) {
         String topic = args[0];
         int threadCount = Integer.parseInt(args[1]);
