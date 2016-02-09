@@ -13,7 +13,7 @@
       private static Producer<Integer, String> producer;
       private final Properties properties = new Properties();
       
-      // Initialing producer with global scope
+      // Default initialising consumer with global scope
       public multiBrokerProducer() {
           properties.put("metadata.broker.list", "localhost:9091, localhost:9092, localhost:9093");
           properties.put("serializer.class", "kafka.serializer.StringEncoder");
