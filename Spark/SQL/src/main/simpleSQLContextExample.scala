@@ -24,7 +24,7 @@
     val sparkConf = new SparkConf().setAppName("RDDRelation")
     val sc = new SparkContext(sparkConf)
   
-    // Creating Hive SQL Context
+    // Creating SQL Context
     val sqlContext = new SQLContext(sc)
     
     println("Start...")
