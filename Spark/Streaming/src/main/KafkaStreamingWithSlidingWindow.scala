@@ -8,7 +8,7 @@ import org.apache.spark.streaming._
 import org.apache.spark.streaming.kafka._
 import org.apache.spark.SparkConf
 
-object KafkaWordCount {
+object kafkaStreamingWithSlidingWindow {
   def main(args: Array[String]) {
     // Checking the authentication credentials 
     if (args.length < 4) {
@@ -21,7 +21,7 @@ object KafkaWordCount {
     val Array(zkQuorum, group, topics, numThreads) = args.take(4)
     
     // Configuring & Creating spark streaming context to receive dstreams
-    val sparkConf = new SparkConf().setAppName("KafkaWordCount")
+    val sparkConf = new SparkConf().setAppName("KafkaStreamingWithSlidingWindow")
     val ssc = new StreamingContext(sparkConf, Seconds(2))
     
     // Checkpointing the Window to persist the DAG
