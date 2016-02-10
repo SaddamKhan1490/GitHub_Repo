@@ -6,7 +6,7 @@
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
-object hdfsTextStream {
+object hdfsTextStreaming {
   def main(args: Array[String]) {
   
     // Checking the authentication credentials
@@ -18,7 +18,7 @@ object hdfsTextStream {
     StreamingExamples.setStreamingLogLevels()
     
     // Configuring & Creating spark streaming context to receive dstreams
-    val sparkConf = new SparkConf().setAppName("HdfsWordCount")
+    val sparkConf = new SparkConf().setAppName("HdfsTextStreaming")
     val ssc = new StreamingContext(sparkConf, Seconds(2))
 
     // Create the FileInputDStream on the directory and use the stream to count words in new files created
@@ -27,6 +27,7 @@ object hdfsTextStream {
     val words = lines.flatMap(_.split(" "))
     val wordCounts = words.map(x => (x, 1)).reduceByKey(_ + _)
     wordCounts.print()
+    
     ssc.start()
     ssc.awaitTermination()
   }
