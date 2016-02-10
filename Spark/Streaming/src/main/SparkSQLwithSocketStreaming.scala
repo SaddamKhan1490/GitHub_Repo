@@ -12,8 +12,8 @@
   import org.apache.spark.util.IntParam
   
 object sparkSQLwithSocketStreaming {
-    // Checking the authentication credentials 
   def main(args: Array[String]) {
+    // Checking the authentication credentials
     if (args.length < 2) {
       System.err.println("Usage: NetworkWordCount <hostname> <port>")
       System.exit(1)
@@ -22,7 +22,7 @@ object sparkSQLwithSocketStreaming {
     StreamingExamples.setStreamingLogLevels()
 
     // Creating the context with a 2 second batch size
-    val sparkConf = new SparkConf().setAppName("sparkSQLwithSocketStreaming")
+    val sparkConf = new SparkConf().setAppName("SparkSQLwithSocketStreaming")
     val ssc = new StreamingContext(sparkConf, Seconds(2))
     
     /* Configuring & Creating spark streaming context to receive dstreams from <hostname> <port>
