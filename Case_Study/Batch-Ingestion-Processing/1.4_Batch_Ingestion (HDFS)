@@ -1,0 +1,130 @@
+================================================================================================================================================================
+#Batch Ingestion (HDFS) i.e. Configuring Kafka Consumers:-
+================================================================================================================================================================
+
+•	Raw layer (Store data AS-IS):-
+
+1> Apache flume1 to consume messages from Airports & Planedate Kafka Topic to HDFS Raw folder:-
+
+   We need to first configure flume1 agent in order to consume messages from kafka topics:-
+
+        flume1.sources = kafka-source-1
+        flume1.channels = hdfs-channel-1
+        flume1.sinks = hdfs-sink-1
+
+        flume1.sources.kafka-source-1.type = org.apache.flume1.source.kafka.KafkaSource
+        flume1.sources.kafka-source-1.zookeeperConnect = IP:2181
+        flume1.sources.kafka-source-1.topic =test
+        flume1.sources.kafka-source-1.batchSize = 100
+        flume1.sources.kafka-source-1.channels = hdfs-channel-1
+
+        flume1.channels.hdfs-channel-1.type = memory
+        flume1.channels.hdfs-channel-1.capacity = 10000
+        flume1.channels.hdfs-channel-1.transactionCapacity = 1000
+
+        flume1.sinks.hdfs-sink-1.channel = hdfs-channel-1
+        flume1.sinks.hdfs-sink-1.type = hdfs
+        flume1.sinks.hdfs-sink-1.hdfs.writeFormat = Text
+        flume1.sinks.hdfs-sink-1.hdfs.fileType = DataStream
+        flume1.sinks.hdfs-sink-1.hdfs.filePrefix = test-events
+        flume1.sinks.hdfs-sink-1.hdfs.useLocalTimeStamp = true
+        flume1.sinks.hdfs-sink-1.hdfs.path = /user/data/raw/topic_name/%{topic}_%y-%m-%d
+        flume1.sinks.hdfs-sink-1.hdfs.rollCount=100
+        flume1.sinks.hdfs-sink-1.hdfs.rollSize=0
+
+ # Note : Using above command we create 2 individual flume1 agents i.e. one per topics, according to our need i.e. Airports &  Planedate, in order to consume published messages from respective kafka topic. All we need to do is just specify the configuration specific to topic.
+
+
+2> Spark Streaming to consume messages from Carriers and OTP Kafka Topic to HDFS Raw folder
+
+      import consumer.kafka.{ProcessedOffsetManager, ReceiverLauncher}
+      import org.apache.spark.storage.StorageLevel
+      import org.apache.spark.streaming.{Seconds, StreamingContext}
+      import org.apache.spark.{SparkConf, SparkContext};
+
+      object LowLevelKafkaConsumer {
+
+        def main(arg: Array[String]): Unit = {
+
+          import org.apache.log4j.{Level, Logger}
+          Logger.getLogger("org").setLevel(Level.OFF)
+          Logger.getLogger("akka").setLevel(Level.OFF)
+
+          //Create SparkContext
+          val conf = new SparkConf()
+            .setMaster("spark://IP:7077")
+            .setAppName("LowLevelKafkaConsumer")
+            .set("spark.executor.memory", "1g")
+            .set("spark.rdd.compress","true")
+            .set("spark.storage.memoryFraction", "1")
+            .set("spark.streaming.unpersist", "true")
+
+          val sc = new SparkContext(conf)
+          val ssc = new StreamingContext(sc, Seconds(10))
+
+          val topic = "topic"
+          val zkhosts = "IP"
+          val zkports = "2181"
+
+          //Specify number of Receivers you need.
+          val numberOfReceivers = 1
+
+          val kafkaProperties: Map[String, String] =
+          Map("zookeeper.hosts" -> zkhosts_ip,
+              "zookeeper.port" -> zkports_port,
+              "kafka.topic" -> topic_name,
+              "zookeeper.consumer.connection" -> "IP:2181",
+              "kafka.consumer.id" -> "kafka-consumer-topic_name",
+              //optional properties
+              "consumer.forcefromstart" -> "true",
+              "consumer.backpressure.enabled" -> "true",
+              "consumer.fetchsizebytes" -> "1048576",
+              "consumer.fillfreqms" -> "1000",
+              "consumer.num_fetch_to_buffer" -> "1")
+
+          val props = new java.util.Properties()
+          kafkaProperties foreach { case (key,value) => props.put(key, value)}
+
+          val tmp_stream = ReceiverLauncher.launch(ssc, props, numberOfReceivers,StorageLevel.MEMORY_ONLY)
+
+          // Writing the messages inside HDFS i.e. raw directory
+          tmp_stream.coalesce(1).write.format("csv").option("header", "true").mode("OVERWRITE").save("/user/data/raw/topic_name/")
+
+          //Start Application Logic
+          tmp_stream.foreachRDD(rdd => {
+              println("\n\nNumber of records in this batch : " + rdd.count())
+          } )
+          //End Application Logic
+
+          //Persists the Max Offset of given Kafka Partition to ZK
+          ProcessedOffsetManager.persists(partitonOffset_stream, props)
+          ssc.start()
+          ssc.awaitTermination()
+        }
+      }
+
+# Note : Using above command we create 2 individual spark-streaming agents i.e. one per topics, according to our need i.e. Carriers and OTP, in order to consume published messages from respective kafka topic. All we need to do is just specify the configuration specific to topic.
+================================================================================================================================================================
+
+• Decomposed layer (Append UUID and timestamp to the AS-IS data):-
+
+# Assumptions:-
+
+  => Here have made an assumption that FlightNum is the unique identifier per UUID & timestamp.
+  => Here have made an assumption that file with FlightNum & UUID is present @ '/user/data/raw/pig_test_additional_column_uuid' inside HDFS
+  => Here have made an assumption that file with FlightNum & timestamp is present @ '/user/data/raw/pig_test_additional_column_timestamp' inside HDFS
+  => Here have made an assumption that '/user/data/raw/topic_name/output/' is the output directory for storing out combined result with (intial columns + UUID column + timestamp column)
+  
+          header = LOAD '/user/data/raw/topic_name/' using PigStorage(',') AS (Year,Month,DayofMonth,DayOfWeek,DepTime,CRSDepTime,ArrTime,CRSArrTime,UniqueCarrier,FlightNum,TailNum,ActualElapsedTime,CRSElapsedTime,AirTime,ArrDelay,DepDelay,Origin,Dest,Distance,TaxiIn,TaxiOut,Cancelled,CancellationCode,Diverted,CarrierDelay,WeatherDelay,NASDelay,SecurityDelay,LateAircraftDelay);
+          temp_uuid = LOAD '/user/data/raw/pig_test_additional_column_uuid' using PigStorage(',') AS (FlightNum,UUID);
+          temp_timestamp = LOAD '/user/data/raw/pig_test_additional_column_timestamp' using PigStorage(',') AS (FlightNum,timestamp);
+
+          joined = COGROUP header BY FlightNum, temp_uuid BY FlightNum, temp_timestamp BY FlightNum; # Here we can also perform nested JOIN over Co-Group
+
+          result = FOREACH joined GENERATE FLATTEN(header), FLATTEN((IsEmpty(temp_uuid) ? TOBAG(TOTUPLE(null) : temp_uuid.UUID)) AS UUID, FLATTEN((IsEmpty(temp_timestamp) ? TOBAG(TOTUPLE(null) : temp_timestamp.timestamp)) AS timestamp;
+          dump result;
+          
+          rmf /user/data/raw/topic_name/output/;
+          STORE result INTO '/user/data/raw/topic_name/output/' using PigStorage (',');
+
+# Note : Using above script we create 4 individual relation (i.e. bag) one per topics according to our need i.e. Airports, Planedate, Carriers and OTP, just by changing the "topic_name" while specifying the path '/user/data/raw/topic_name/' for loading data inside relation (i.e. bag) in order to append UUID and timestamp .
