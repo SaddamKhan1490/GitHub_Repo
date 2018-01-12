@@ -1,0 +1,166 @@
+================================================================================================================================================================================================================================================
+# Data preparation :-
+================================================================================================================================================================================================================================================
+
+# Generating input data out of source details specified in step - 1.2 for processing :-
+
+  => Download Apache Kafka from below link:-
+  
+     https://kafka.apache.org/downloads
+     
+# Note : Here we will go with Kafka-8 for our topic's reason being non-secure
+
+1> we will start zookeeper as when kafka server stars it registers itself with zookeeper in order to maintain state of Kafka server
+
+  => switch to downloaded kafka folder and type below command : ./bin/zookeeper-server-start.sh config/zookeeper.properties
+
+2> once zookeeper is started similarly we cab start the kafka server
+
+  => switch to downloaded kafka folder and type below command : ./bin/kafka-server-start.sh -daemon config/server.properties
+
+# Note : Here before starting the kafka server we can specify all neccessary configuration such as :-
+
+  => broker.id - Id of the broker i.e. an integer. Each broker in a cluster needs to have a unique id.
+  => log.dirs - Directory where you want Kafka to commit its message. Not to be confused it with usual log files.
+  => port - Port on which Kafka will accept connections from producers and consumers
+  => zookeeper.connect - Comma separate list of ZooKeeper nodes. E.g. hostname1:port1,hostname2:port2. In our case, we will set it to localhost:2181
+
+# Setting up a multi-broker cluster
+
+  First we make a config file for each of the brokers (on Windows use the copy command instead):
+
+  => cp config/server.properties config/server-1.properties
+  => cp config/server.properties config/server-2.properties
+
+# Now edit these new files and set the following properties:
+
+# config/server-1.properties:
+    broker.id=1
+    listeners=PLAINTEXT://:9092
+    log.dir=/tmp/kafka-logs-1
+
+# config/server-2.properties:
+    broker.id=2
+    listeners=PLAINTEXT://:9092
+    log.dir=/tmp/kafka-logs-2
+
+# The broker.id property is the unique and permanent name of each node in the cluster. We have to override the port and log directory only because we are running these all on the same machine and we want to keep the brokers from all trying to register on the same port or overwrite each other's data.
+
+# We already have Zookeeper and our single node started, so we just need to start the two new nodes:
+  => bin/kafka-server-start.sh config/server-1.properties
+  => bin/kafka-server-start.sh config/server-2.properties
+
+3> Now we can proceed to set up our Kafka Topic in order to feed messages which we later want to use it.
+
+# Let's create a topic named "test" with a single partition and only one replica:
+
+ => switch to downloaded kafka folder and type below command :  ./bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+
+# Note : Using above command we create 4 individual topics according to our need i.e. Airports, Planedate, Carriers and OTP.
+================================================================================================================================================================================================================================================
+# Verify the topic
+================================================================================================================================================================================================================================================
+ => switch to downloaded kafka folder and type below command : ./bin/kafka-topics.sh --list --zookeeper localhost:2181
+ => switch to downloaded kafka folder and type below command : ./bin/kafka-topics.sh --describe --zookeeper localhost:2181 --topic test
+================================================================================================================================================================================================================================================
+# Once cluster is set-up and topic got created then we are all set to start producing messages inside kafka topic. Later which we can consume via singe or multiple consumer depending the the retention period.
+================================================================================================================================================================================================================================================
+import java.util.*;
+import kafka.javaapi.producer.Producer;
+import kafka.producer.KeyedMessage;
+import kafka.producer.ProducerConfig;
+
+import java.util.Properties;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
+import kafka.javaapi.producer.Producer;
+import kafka.producer.KeyedMessage;
+import kafka.producer.ProducerConfig;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.LocatedFileStatus;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.RemoteIterator;
+import org.apache.hadoop.hdfs.DistributedFileSystem;
+
+
+	public class Producer {
+			   // Variable declaration
+			    private static Producer<Integer, String> producer;
+			    private final Properties properties = new Properties();
+			    Properties prop1 = new Properties();
+			    InputStream input1 = new FileInputStream("config.properties");
+
+			   // Default initializing producer with global scope
+			    public Producer() throws IOException, Exception{
+					prop1.load(input1);
+			        properties.put("metadata.broker.list", prop1.getProperty("brokers"));
+			        properties.put("serializer.class", prop1.getProperty("serializer"));
+			        properties.put("request.required.acks", prop1.getProperty("ack"));
+			        properties.put("producer.type",prop1.getProperty("p_type"));
+			        properties.put("security.protocol", prop1.getProperty("protocol"));
+			        properties.put("ssl.truststore.location", prop1.getProperty("t_loc"));
+			        properties.put("ssl.keystore.location", prop1.getProperty("k_loc"));
+			        properties.put("ssl.truststore.password", prop1.getProperty("t_pass"));
+			        properties.put("ssl.keystore.password", prop1.getProperty("k_pass"));
+			        producer = new Producer<Integer, String>(new ProducerConfig(properties));
+			    }
+
+				    public static void main(String[] args) throws IOException, Exception {
+				    	// Creating new producer object to produce messages
+				    	new Producer();
+				        final Properties prop2 = new Properties();
+				        InputStream input2 = new FileInputStream("config.properties");
+				        prop2.load(input2);
+				        String topic = prop2.getProperty("topic");
+				        String line;
+						  // Set Input Path for Parser.
+				    	Path srcPath = new Path(prop2.getProperty("src_path"));
+				    	final Configuration Conf = new Configuration();
+				    	FileSystem tarsrc = srcPath.getFileSystem(Conf);
+				    	final DistributedFileSystem dFS = new DistributedFileSystem() {{initialize(new URI(prop2.getProperty("uri")),Conf);}};
+				    	// Feed one file at a time to Parser.
+				    	RemoteIterator<LocatedFileStatus> it1 = tarsrc.listFiles(srcPath, false);
+				    	while (it1.hasNext()) {
+							Path fileName = ((LocatedFileStatus) it1.next()).getPath();
+							FSDataInputStream streamReader = dFS.open(fileName);
+							FileSystem fs = FileSystem.get(new Configuration());
+			    	        // Start reading the input file from HDFS.
+			    	        BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(fs.open(fileName)));
+			    	        String msg = null;
+			    	        while((line = bufferedReader.readLine()) != null) {
+			    	        	 try {
+									String suffix =line;
+							        msg += suffix+",\\n,";
+									}catch (Exception e) {
+									 e.printStackTrace();
+									 System.exit(1);
+								}
+							}
+			    	         msg = msg.substring(4, msg.length() - 4);
+			    	         // Publish message
+			    	         KeyedMessage<Integer, String> data = new KeyedMessage<Integer, String>(topic, msg);
+						     producer.send(data);
+						// Close current file
+						bufferedReader.close();
+						streamReader.close();
+					 }
+				  // Close producer
+				  dFS.close();
+				  producer.close();
+			}
+	}
+================================================================================================================================================================================================================================================
+
+#Note :
+
+1> Pseudo code for Kafka producer where we are prefixing key with messages
+
+2> Can minimise the code length and improve performance by using apache camel as publisher with spring boot
+
+3> Using above code we create 4 individual producer i.e. one per topi, according to our need i.e. Airports, Planedate, Carriers and OTP. All we need to do is that we will pass 4 - different configuration details files i.e. one per topic, in order to publish messages to respected topics per file
