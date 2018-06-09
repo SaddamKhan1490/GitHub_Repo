@@ -4,4 +4,4 @@ Docker is a containerization platform which packages your application and all it
 
 Docker containers, wrap a piece of software in a complete filesystem that contains everything needed to run: code, runtime, system tools, system libraries etc. anything that can be installed on a server. This guarantees that the software will always run the same, regardless of its environment
 
-Prupose of this repository is to explore various nuances of docker with help of examples
+Purpose of this repository is to explore various nuances of docker with help of examples
