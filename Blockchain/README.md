@@ -4,4 +4,4 @@ A blockchain is a continuously growing list of records called blocks, which are 
 
 Blockchains are secure by design and exemplify a distributed computing system with high fault tolerance. Decentralized consensus has therefore been achieved with a blockchain.This makes blockchains potentially suitable for the recording of events, bank tarnsactions and payments, medical records, and other records management activities, such as identity management, transaction processing, documenting provenance, food traceability, and voting.
 
-Purpose of this repository is to explore various nuances of blockchain with help of examples
+Purpose of this repository is to explore various nuances of blockchain with help of examples.
