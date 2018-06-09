@@ -1,7 +1,9 @@
 /**
   * Created by Saddam on 05/14/2018
   */
-  
+
+package com.example.blockchain;
+
 public class Transaction {
 
     private String sourceName;
