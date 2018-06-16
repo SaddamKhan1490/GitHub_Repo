@@ -4,8 +4,8 @@
   
 package com.example.service.datafetcher;
 
-import com.techprimers.graphql.springbootgrapqlexample.model.Book;
-import com.techprimers.graphql.springbootgrapqlexample.repository.BookRepository;
+import com.example.model.Book;
+import com.example.repository.BookRepository;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.beans.factory.annotation.Autowired;
