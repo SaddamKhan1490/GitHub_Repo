@@ -405,4 +405,3 @@ LOAD DATA from FILE :-
  RETURN count(*);
 
 Neo.ClientError.Statement.ExternalResourceFailed: Couldn't load the external resource at: file:/C:/Users/S771125/Documents/Softwares/NEO4J_HOME/import/Users/S771125/Desktop/data.csv
-==============================================================================================================================================================================================================
