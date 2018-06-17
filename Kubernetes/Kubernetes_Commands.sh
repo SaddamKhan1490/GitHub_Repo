@@ -17,6 +17,7 @@ $ kubectl get deployment my-dep                 # List a particular deployment
 $ kubectl get pods --include-uninitialized      # List all pods in the namespace, including uninitialized ones
 
 # Describe commands with verbose output
+
 $ kubectl describe nodes my-node
 $ kubectl describe pods my-pod
 
