@@ -29,22 +29,22 @@ $ kubectl -n my-ns delete po,svc --all                                     			# 
 
 # Interacting with Pods:-
 $ kubectl get pods 	
-$ kubectl top pods																												# Metric of all pods
-$ kubectl attach <pod> –c <container>																							# Attach to container of pod																											# List all pods
-$ kubectl get pods --all-namespaces             																				# List all pods in all namespaces
-$ kubectl get pods --sort-by='.status.containerStatuses[0].restartCount'														# List pods Sorted by Restart Count
+$ kubectl top pods																												                                                                               # Metric of all pods
+$ kubectl attach <pod> –c <container>																							                                                                 # Attach to container of pod																											# List all pods
+$ kubectl get pods --all-namespaces             																				                                                         # List all pods in all namespaces
+$ kubectl get pods --sort-by='.status.containerStatuses[0].restartCount'														                                       # List pods Sorted by Restart Count
 $ kubectl get pods -o json | jq '.items[].spec.containers[].env[]?.valueFrom.secretKeyRef.name' | grep -v null | sort | uniq	# List all Secrets currently in use by a pod
-$ kubectl get pods --selector=app=cassandra rc -o  jsonpath='{.items[*].metadata.labels.version}'								# Get the version label of all pods with label app=cassandra
-$ kubectl get pods --field-selector=status.phase=Running																		# Get all running pods in the namespace
-$ kubectl get pods --include-uninitialized  																					# List all pods in the namespace, including uninitialized ones
-$ kubectl describe pods my-pod																									# List all details of specified pod
-$ kubectl explain pods		                	  																				# get the documentation for pod manifests
-$ kubectl get pods -o wide                  																					# List all pods in the namespace, with more details
-$ kubectl label pods my-pod new-label=awesome                      																# Add a Label to pod
-$ kubectl annotate pods my-pod icon-url=http://goo.gl/XXBTWq       																# Add an annotation to pod
-$ kubectl get pod mypod -o yaml | sed 's/\(image: myimage\):.*$/\1:v4/' | kubectl replace -f -									# Update a single-container pod's image version (tag) from v1 to v4
-$ kubectl replace --force -f ./pod.json																							# Force will replace, delete and then re-create the resource i.e. pod here file is 'pod.json'      # Will cause a service outage.
-$ cat pod.json | kubectl replace -f -                              																# Replace a pod based on the JSON passed into stdin
+$ kubectl get pods --selector=app=cassandra rc -o  jsonpath='{.items[*].metadata.labels.version}'							                    	# Get the version label of all pods with label app=cassandra
+$ kubectl get pods --field-selector=status.phase=Running																		                                                   # Get all running pods in the namespace
+$ kubectl get pods --include-uninitialized  																					                                                            # List all pods in the namespace, including uninitialized ones
+$ kubectl describe pods my-pod																									                                                                      # List all details of specified pod
+$ kubectl explain pods		                	  																				                                                              # get the documentation for pod manifests
+$ kubectl get pods -o wide                  																					                                                            # List all pods in the namespace, with more details
+$ kubectl label pods my-pod new-label=awesome                      															                                          	# Add a Label to pod
+$ kubectl annotate pods my-pod icon-url=http://goo.gl/XXBTWq       																                                          # Add an annotation to pod
+$ kubectl get pod mypod -o yaml | sed 's/\(image: myimage\):.*$/\1:v4/' | kubectl replace -f -									                      # Update a single-container pod's image version (tag) from v1 to v4
+$ kubectl replace --force -f ./pod.json																						                                                               	# Force will replace, delete and then re-create the resource i.e. pod here file is 'pod.json'      # Will cause a service outage.
+$ cat pod.json | kubectl replace -f -                              															                                          	# Replace a pod based on the JSON passed into stdin
 $ sel=${$(kubectl get rc my-rc --output=json | jq -j '.spec.selector | to_entries | .[] | "\(.key)=\(.value),"')%?} | $ echo $(kubectl get pods --selector=$sel --output=jsonpath={.items..metadata.name})		# List Names of Pods that belong to Particular RC | # "jq" command useful for transformations that are too complex for jsonpath, it can be found at https://stedolan.github.io/jq/
 
 
@@ -62,35 +62,35 @@ $ kubectl top pod POD_NAME --containers               								# Show metrics for
 
 
 # Interacting with Services:-
-$ kubectl get services                          									# List all services in the namespace
-$ kubectl get services --sort-by=.metadata.name 									# List Services Sorted by Name
+$ kubectl get services                          									     # List all services in the namespace
+$ kubectl get services --sort-by=.metadata.name 									     # List Services Sorted by Name
 $ kubectl expose rc nginx --port=80 --target-port=8000								# Create a service for a replicated nginx, which serves on port 80 and connects to the containers on port 8000
-$ kubectl explain svc                       										# Get the documentation for svc manifests
-$ kubectl exec <service> <command> [-c <container>]									# Execute command on container of service
+$ kubectl explain svc                       										        # Get the documentation for svc manifests
+$ kubectl exec <service> <command> [-c <container>]								  	# Execute command on container of service
 
 
 # Interacting with ReplicationController:-
-$ kubectl get rc																	# List all ReplicationController
-$ kubectl get rc --namespace="<namespace>"                 							# List a particular ReplicationController
-$ kubectl describe rc <name>               											# Describe ReplicationController
-$ kubectl explain rc																# Get the documentation for ReplicationController
+$ kubectl get rc																                              # List all ReplicationController
+$ kubectl get rc --namespace="<namespace>"                 			# List a particular ReplicationController
+$ kubectl describe rc <name>               										        	# Describe ReplicationController
+$ kubectl explain rc														                          		# Get the documentation for ReplicationController
 
 
 # Interacting with Deployment:-
-$ kubectl get deployment															# List all deployment
-$ kubectl get deployment my-dep                 									# List a particular deployment
-$ kubectl autoscale deployment foo --min=2 --max=10                					# Auto scale a deployment "foo"
-$ kubectl set image deployment/Deployment tomcat=tomcat:6.0							# Update deployment
-$ kubectl rollout status deployment/Deployment										# Status of deployement
-$ kubectl rollout undo deployment/Deployment –to-revision=2							# Rollback to previous version of deployment
+$ kubectl get deployment															                       # List all deployment
+$ kubectl get deployment my-dep                 									     # List a particular deployment
+$ kubectl autoscale deployment foo --min=2 --max=10           # Auto scale a deployment "foo"
+$ kubectl set image deployment/Deployment tomcat=tomcat:6.0			# Update deployment
+$ kubectl rollout status deployment/Deployment										      # Status of deployement
+$ kubectl rollout undo deployment/Deployment –to-revision=2			# Rollback to previous version of deployment
 
 
 # Interacting with Nodes:-
-$ kubectl get nodes																																								# List all node
-$ kubectl get nodes	-want																																						# Watch node continuously																
-$ kubectl top nodes																																								# Mteric of all nodes
-$ kubectl describe nodes my-node																																				# List all details of specified node i.e. verbose
-$ kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="ExternalIP")].address}'																					# Get ExternalIPs of all nodes
+$ kubectl get nodes																																								                                                                                                                   # List all node
+$ kubectl get nodes	-want																																					                                                                                                                # Watch node continuously																
+$ kubectl top nodes																																								                                                                                                                   # Metric of all nodes
+$ kubectl describe nodes my-node																														                                                                                                                # List all details of specified node i.e. verbose
+$ kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="ExternalIP")].address}'																					                                                          # Get ExternalIPs of all nodes
 $ JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}' && kubectl get nodes -o jsonpath="$JSONPATH" | grep "Ready=True"	# Check which nodes are ready
 
  
@@ -102,12 +102,12 @@ $ kubectl top node my-node                                              			# Sho
 $ kubectl cluster-info                                                  			# Display addresses of the master and services
 $ kubectl cluster-info dump                                             			# Dump current cluster state to stdout
 $ kubectl cluster-info dump --output-directory=/path/to/cluster-state   			# Dump current cluster state to /path/to/cluster-state
-$ kubectl taint nodes foo dedicated=special-user:NoSchedule							# Allow master to run pod. If a taint with that key and effect already exists, its value is replaced as specified.
+$ kubectl taint nodes foo dedicated=special-user:NoSchedule							         # Allow master to run pod. If a taint with that key and effect already exists, its value is replaced as specified.
 
 
 # Interacting with Events:-
-$ kubectl get events																# List all events
-$ kubectl get events --sort-by=.metadata.creationTimestamp							# List Events sorted by timestamp
+$ kubectl get events																                                       # List all events
+$ kubectl get events --sort-by=.metadata.creationTimestamp						          	# List Events sorted by timestamp
 
 
 # Updating Resources:-
@@ -126,11 +126,11 @@ $ kubectl scale --replicas=5 rc/foo rc/bar rc/baz                   				# Scale 
 
 
 # Patching Resources:-
-$ kubectl patch node k8s-node-1 -p '{"spec":{"unschedulable":true}}' 																			# Partially update a node
-$ kubectl patch pod valid-pod -p '{"spec":{"containers":[{"name":"kubernetes-serve-hostname","image":"new image"}]}}'							# Update a container's image; spec.containers[*].name is required because it's a merge key
-$ kubectl patch pod valid-pod --type='json' -p='[{"op": "replace", "path": "/spec/containers/0/image", "value":"new image"}]'					# Update a container's image using a json patch with positional arrays
+$ kubectl patch node k8s-node-1 -p '{"spec":{"unschedulable":true}}' 																			                                                     # Partially update a node
+$ kubectl patch pod valid-pod -p '{"spec":{"containers":[{"name":"kubernetes-serve-hostname","image":"new image"}]}}'							                 # Update a container's image; spec.containers[*].name is required because it's a merge key
+$ kubectl patch pod valid-pod --type='json' -p='[{"op": "replace", "path": "/spec/containers/0/image", "value":"new image"}]'					           # Update a container's image using a json patch with positional arrays
 $ kubectl patch deployment valid-deployment  --type json   -p='[{"op": "remove", "path": "/spec/template/spec/containers/0/livenessProbe"}]'	# Disable a deployment livenessProbe using a json patch with positional arrays
-$ kubectl patch sa default --type='json' -p='[{"op": "add", "path": "/secrets/1", "value": {"name": "whatever" } }]'							# Add a new element to a positional array 
+$ kubectl patch sa default --type='json' -p='[{"op": "add", "path": "/secrets/1", "value": {"name": "whatever" } }]'						                  	# Add a new element to a positional array 
 
 
 # Viewing Logs:-
@@ -189,51 +189,51 @@ $ Kubectl Autocomplete
 $ Kubectl Context and Configuration
 
 # Kubectl Autocomplete:-
-$ source <(kubectl completion bash) 																		# setup autocomplete in bash, bash-completion package should be installed first.
-$ source <(kubectl completion zsh)  																		# setup autocomplete in zsh
+$ source <(kubectl completion bash) 																		                                                   # setup autocomplete in bash, bash-completion package should be installed first.
+$ source <(kubectl completion zsh)  																		                                                   # setup autocomplete in zsh
 # Kubectl Context and Configuration:-
-$ kubectl config view -o jsonpath='{.users[?(@.name == "e2e")].user.password}'								# Get the password for the e2e user
+$ kubectl config view -o jsonpath='{.users[?(@.name == "e2e")].user.password}'							                   	# Get the password for the e2e user
 $ kubectl config set-credentials kubeuser/foo.kubernetes.com --username=kubeuser --password=kubepassword	# Add a new cluster to your kubeconf that supports basic auth
 $ kubectl config set-context gce --user=cluster-admin --namespace=foo && kubectl config use-context gce		# Set a context utilizing a specific username and namespace.
-$ kubectl config set PROPERTY_NAME PROPERTY_VALUE															# Sets an individual value in kubeconfig file
-$ kubectl config unset PROPERTY_NAME PROPERTY_VALUE															# Unsets a specific component in kubectl.
-$ kubectl config use-context <Context Name>																	# Sets the current context in kubectl file.
-$ kubectl config current-context              																# Display the current-context
-$ kubectl config use-context my-cluster-name  																# set the default context to my-cluster-name
-$ kubectl config view																						# Show Merged kubeconfig settings.
-$ KUBECONFIG=~/.kube/config:~/.kube/kubconfig2 kubectl config view											# Use multiple kubeconfig files at the same time and view merged config
-$ kubectl edit svc/docker-registry                      													# Edit the service named docker-registry
-$ KUBE_EDITOR="nano" kubectl edit svc/docker-registry   													# Use an alternative editor
-$ kubectl cp <Files from source> <Files to Destinatiion>													# Copy files and directories to and from containers.
-$ kubectl cp /tmp/foo <some-pod>:/tmp/bar -c <specific-container>											# Copy files and directories to and from containers.
+$ kubectl config set PROPERTY_NAME PROPERTY_VALUE															                                         # Sets an individual value in kubeconfig file
+$ kubectl config unset PROPERTY_NAME PROPERTY_VALUE														                                       	# Unsets a specific component in kubectl.
+$ kubectl config use-context <Context Name>															                                             		# Sets the current context in kubectl file.
+$ kubectl config current-context              														                                           		# Display the current-context
+$ kubectl config use-context my-cluster-name  														                                           		# set the default context to my-cluster-name
+$ kubectl config view																					                                                              	# Show Merged kubeconfig settings.
+$ KUBECONFIG=~/.kube/config:~/.kube/kubconfig2 kubectl config view						                            					# Use multiple kubeconfig files at the same time and view merged config
+$ kubectl edit svc/docker-registry                      										                                    			# Edit the service named docker-registry
+$ KUBE_EDITOR="nano" kubectl edit svc/docker-registry   											                                    		# Use an alternative editor
+$ kubectl cp <Files from source> <Files to Destinatiion>											                                    		# Copy files and directories to and from containers.
+$ kubectl cp /tmp/foo <some-pod>:/tmp/bar -c <specific-container>										                             	# Copy files and directories to and from containers.
 
 # Short-Hand Notation or Abbreviated alias
 certificatesigningrequests			csr
-componentstatuses					cs
-configmaps							cm
-customresourcedefinition			crd, crds
-daemonsets							ds
-deployments							deploy
-endpoints							ep
-events								ev
-horizontalpodautoscalers			hpa
-ingresses							ing
-limitranges							limits
-namespaces							ns
-networkpolicies						netpol
-nodes								no
-persistentvolumeclaims				pvc
-persistentvolumes					pv
-poddisruptionbudgets				pdb	
-pods								po
-podsecuritypolicies					psp
-replicasets							rs
-replicationcontrollers				rc
-resourcequotas						quota
-serviceaccount						sa
-services							svc
-statefulsets						sts
-storageclasses						sc
+componentstatuses					       cs
+configmaps							            cm
+customresourcedefinition			  crd, crds
+daemonsets							            ds
+deployments						           	deploy
+endpoints						             	ep
+events								               ev
+horizontalpodautoscalers		  	hpa
+ingresses							             ing
+limitranges							           limits
+namespaces							            ns
+networkpolicies						        netpol
+nodes								                no
+persistentvolumeclaims		   		pvc
+persistentvolumes				       	pv
+poddisruptionbudgets     				pdb	
+pods							                 	po
+podsecuritypolicies     					psp
+replicasets							           rs
+replicationcontrollers		   		rc
+resourcequotas					         	quota
+serviceaccount					         	sa
+services						              	svc
+statefulsets		           				sts
+storageclasses				         		sc
 
 
 # Formatting output
