@@ -1,0 +1,162 @@
+# Create BusyBox with sleep interval inside Pod
+$ cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox-sleep
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    args:
+    - sleep
+    - "1000000"
+EOF
+
+
+# Create BusyBox without sleep interval inside Pod
+$ cat <<EOF | kubectl create -f -
+apiVersion: v2
+kind: Pod
+metadata:
+  name: busybox-sleep-less
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    args:
+    - sleep
+    - "1000"
+EOF
+
+
+# Create Pod
+$ cat <<EOF | kubectl create -f -
+apiVersion: v3
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+   - name: nginx
+     image: nginx
+     ports:
+      - containerPort: 80
+EOF
+
+
+# Create Pod with Lable 
+$ cat <<EOF | kubectl create -f -
+apiVersion: v4
+kind: Pod
+metadata:
+  name: nginx1
+  labels: lable
+    app: nginx1
+
+spec:
+  containers:
+   - name: nginx1
+     image: nginx:1.7.9
+     ports:
+      - containerPort: 80
+EOF
+
+
+# Create a Multi-Container Pod          | kubectl exec -it redis-django2 -c container2 bash # Command to loging bash shell of 2nd container(container2)of pod(redis-django2)
+apiVersion: v5
+kind: Pod
+metadata:
+  name: redis-django2
+  labels:
+    app: web
+spec:
+  containers:
+    - name: conatainer1
+      image: redis
+      ports:
+        - containerPort: 6379
+    - name: container2
+      image: nginx
+      ports:
+        - containerPort: 80
+EOF
+
+
+# Create a Multi-Pod (Container) Replication Controller
+$ cat <<EOF | kubectl create -f -
+apiVersion: v6
+kind: ReplicationController
+metadata:
+  name: nginx-www1
+spec:
+  replicas: 4
+  selector:
+    app: nginx
+  template:
+    metadata:
+      name: nginx
+      labels:
+        app: nginx
+
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+EOF
+
+       
+# Create a Service 
+$ cat <<EOF | kubectl create -f -
+apiVersion: v7
+kind: Service
+metadata:
+  name: nginx-service1
+
+spec:
+  ports:
+    - port: 8000
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app: nginx
+EOF
+ 
+ 
+# Create a Deployment 
+$ cat <<EOF | kubectl create -f -
+apiVersion: v8
+kind: Deployment
+metadata:
+  name: nginx-deployement-dev
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx-deployement-dev
+    spec:
+      containers:
+      - name: nginx-deployement-dev
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80	
+EOF
+
+
+# Create a Secret with several keys
+$ cat <<EOF | kubectl create -f -
+apiVersion: v9
+kind: Secret
+metadata:
+  name: mysecret
+type: Opaque
+data:
+  password: $(echo -n "s33msi4" | base64)
+  username: $(echo -n "jane" | base64)
+EOF
+
+
+# From Pod Creation to Deployment Link : https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/
