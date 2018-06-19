@@ -309,4 +309,3 @@ Neo.ClientError.Statement.ExternalResourceFailed: Couldn't load the external res
 2> Follow Camel-Casing to declare lable name 
 3> Cannot be applied to node which already has same lable
 
-
