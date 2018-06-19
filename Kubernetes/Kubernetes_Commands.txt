@@ -29,23 +29,23 @@ $ kubectl -n my-ns delete po,svc --all                                          
 
 
 # Interacting with Pods:-
-$ kubectl get pods 	
-$ kubectl top pods																												                                                                               # Metric of all pods
-$ kubectl attach <pod> –c <container>																							                                                                 # Attach to container of pod																											# List all pods
-$ kubectl get pods --all-namespaces             																				                                                         # List all pods in all namespaces
-$ kubectl get pods --sort-by='.status.containerStatuses[0].restartCount'														                                       # List pods Sorted by Restart Count
+$ kubectl get pods                                                                                  # List of all pods
+$ kubectl top pods                                                                                  # Metric of all pods
+$ kubectl attach <pod> –c <container>                                                               # Attach to container of pod
+$ kubectl get pods --all-namespaces                                                                 # List all pods in all namespaces
+$ kubectl get pods --sort-by='.status.containerStatuses[0].restartCount'                            # List pods Sorted by Restart Count
 $ kubectl get pods -o json | jq '.items[].spec.containers[].env[]?.valueFrom.secretKeyRef.name' | grep -v null | sort | uniq	# List all Secrets currently in use by a pod
-$ kubectl get pods --selector=app=cassandra rc -o  jsonpath='{.items[*].metadata.labels.version}'							                    	# Get the version label of all pods with label app=cassandra
-$ kubectl get pods --field-selector=status.phase=Running																		                                                   # Get all running pods in the namespace
-$ kubectl get pods --include-uninitialized  																					                                                            # List all pods in the namespace, including uninitialized ones
-$ kubectl describe pods my-pod																									                                                                      # List all details of specified pod
-$ kubectl explain pods		                	  																				                                                              # get the documentation for pod manifests
-$ kubectl get pods -o wide                  																					                                                            # List all pods in the namespace, with more details
-$ kubectl label pods my-pod new-label=awesome                      															                                          	# Add a Label to pod
-$ kubectl annotate pods my-pod icon-url=http://goo.gl/XXBTWq       																                                          # Add an annotation to pod
-$ kubectl get pod mypod -o yaml | sed 's/\(image: myimage\):.*$/\1:v4/' | kubectl replace -f -									                      # Update a single-container pod's image version (tag) from v1 to v4
-$ kubectl replace --force -f ./pod.json																						                                                               	# Force will replace, delete and then re-create the resource i.e. pod here file is 'pod.json'      # Will cause a service outage.
-$ cat pod.json | kubectl replace -f -                              															                                          	# Replace a pod based on the JSON passed into stdin
+$ kubectl get pods --selector=app=cassandra rc -o  jsonpath='{.items[*].metadata.labels.version}'   # Get the version label of all pods with label app=cassandra
+$ kubectl get pods --field-selector=status.phase=Running                                            # Get all running pods in the namespace
+$ kubectl get pods --include-uninitialized                                                          # List all pods in the namespace, including uninitialized ones
+$ kubectl describe pods my-pod                                                                      # List all details of specified pod
+$ kubectl explain pods                                                                              # get the documentation for pod manifests
+$ kubectl get pods -o wide                                                                          # List all pods in the namespace, with more details
+$ kubectl label pods my-pod new-label=awesome                                                       # Add a Label to pod
+$ kubectl annotate pods my-pod icon-url=http://goo.gl/XXBTWq                                        # Add an annotation to pod
+$ kubectl get pod mypod -o yaml | sed 's/\(image: myimage\):.*$/\1:v4/' | kubectl replace -f -      # Update a single-container pod's image version (tag) from v1 to v4
+$ kubectl replace --force -f ./pod.json                                                             # Force will replace, delete and then re-create the resource i.e. pod here file is 'pod.json'      # Will cause a service outage.
+$ cat pod.json | kubectl replace -f -                                                               # Replace a pod based on the JSON passed into stdin
 $ sel=${$(kubectl get rc my-rc --output=json | jq -j '.spec.selector | to_entries | .[] | "\(.key)=\(.value),"')%?} | $ echo $(kubectl get pods --selector=$sel --output=jsonpath={.items..metadata.name})		# List Names of Pods that belong to Particular RC | # "jq" command useful for transformations that are too complex for jsonpath, it can be found at https://stedolan.github.io/jq/
 
 
@@ -88,7 +88,7 @@ $ kubectl rollout undo deployment/Deployment –to-revision=2                   
 
 # Interacting with Nodes:-
 $ kubectl get nodes                                                                                 # List all node
-$ kubectl get nodes	-want                                                                           # Watch node continuously
+$ kubectl get nodes -want                                                                           # Watch node continuously
 $ kubectl top nodes                                                                                 # Metric of all nodes
 $ kubectl drain tomcat –force                                                                       # Drain a node for maintenance purpose
 $ kubectl describe nodes my-node                                                                    # List all details of specified node i.e. verbose
