@@ -1,6 +1,5 @@
 # Commands Classification based on Purpose or Usage:-
 
-
 1> Commands for Creating Objects (service-pod-replicationcontrollers-deployment)
 2> Commands for Viewing or Finding Resources (service-pod-replicationcontrollers-deployment)
 3> Commands for Updating Resources (service-pod-replicationcontrollers-deployment)
@@ -18,6 +17,7 @@ $ kubectl create -f https://git.io/vPieo         									# create resource(s) f
 $ kubectl create namespace <namespace>												# create namespace
 $ kubectl create –f Deployment.yaml -–record										# create deployment
 $ kubectl run nginx --image=nginx                									# start a single instance of nginx
+
 
 # Deleting Resources(service-pod-replicationcontrollers-deployment):-
 $ kubectl delete -f ./pod.json                                             			# Delete a pod using the type and name specified in pod.json
