@@ -11,21 +11,21 @@
 
 
 # Creating Resources(service-pod-replicationcontrollers-deployment) using Yaml or Json file:-
-$ kubectl create -f ./my-manifest.yaml           									# create resource(s)
-$ kubectl create -f ./my1.yaml -f ./my2.yaml     									# create from multiple files
-$ kubectl create -f ./dir                        									# create resource(s) in all manifest files in dir
-$ kubectl create -f https://git.io/vPieo         									# create resource(s) from url
-$ kubectl create namespace <namespace>												# create namespace
-$ kubectl create –f Deployment.yaml -–record										# create deployment
-$ kubectl run nginx --image=nginx                									# start a single instance of nginx
+$ kubectl create -f ./my-manifest.yaml                                                             # Create resource(s)
+$ kubectl create -f ./my1.yaml -f ./my2.yaml                                                       # Create from multiple files
+$ kubectl create -f ./dir                                                                          # Create resource(s) in all manifest files in dir
+$ kubectl create -f https://git.io/vPieo                                                           # Create resource(s) from url
+$ kubectl create namespace <namespace>                                                             # Create namespace
+$ kubectl create –f Deployment.yaml -–record                                                       # Create deployment
+$ kubectl run nginx --image=nginx                                                                  # Start a single instance of nginx
 
 
 # Deleting Resources(service-pod-replicationcontrollers-deployment):-
-$ kubectl delete -f ./pod.json                                             			# Delete a pod using the type and name specified in pod.json
-$ kubectl delete pod,service baz foo                                       			# Delete pods and services with same names "baz" and "foo"
-$ kubectl delete pods,services -l name=myLabel                             			# Delete pods and services with label name=myLabel
-$ kubectl delete pods,services -l name=myLabel --include-uninitialized     			# Delete pods and services, including uninitialized ones, with label name=myLabel
-$ kubectl -n my-ns delete po,svc --all                                     			# Delete all pods and services, including uninitialized ones, in namespace my-ns
+$ kubectl delete -f ./pod.json                                                                     # Delete a pod using the type and name specified in pod.json
+$ kubectl delete pod,service baz foo                                                               # Delete pods and services with same names "baz" and "foo"
+$ kubectl delete pods,services -l name=myLabel                                                     # Delete pods and services with label name=myLabel
+$ kubectl delete pods,services -l name=myLabel --include-uninitialized                             # Delete pods and services, including uninitialized ones, with label name=myLabel
+$ kubectl -n my-ns delete po,svc --all                                                             # Delete all pods and services, including uninitialized ones, in namespace my-ns
 
 
 # Interacting with Pods:-
@@ -50,80 +50,81 @@ $ sel=${$(kubectl get rc my-rc --output=json | jq -j '.spec.selector | to_entrie
 
 
 # Interacting with running Pods:-
-$ kubectl logs my-pod                                 								# dump pod logs (stdout)
-$ kubectl logs my-pod -c my-container                 								# dump pod container logs (stdout, multi-container case)
-$ kubectl logs -f my-pod                              								# stream pod logs (stdout)
-$ kubectl logs -f my-pod -c my-container              								# stream pod container logs (stdout, multi-container case)
-$ kubectl run -i --tty busybox --image=busybox -- sh  								# Run pod as interactive shell
-$ kubectl attach my-pod -i                            								# Attach to Running Container
-$ kubectl port-forward my-pod 5000:6000               								# Listen on port 5000 on the local machine and forward to port 6000 on my-pod
-$ kubectl exec my-pod -- ls /                         								# Run command in existing pod (1 container case)
-$ kubectl exec my-pod -c my-container -- ls /         								# Run command in existing pod (multi-container case)
-$ kubectl top pod POD_NAME --containers               								# Show metrics for a given pod and its containers
+$ kubectl logs my-pod                                                                               # dump pod logs (stdout)
+$ kubectl logs my-pod -c my-container                                                               # dump pod container logs (stdout, multi-container case)
+$ kubectl logs -f my-pod                                                                            # stream pod logs (stdout)
+$ kubectl logs -f my-pod -c my-container                                                            # stream pod container logs (stdout, multi-container case)
+$ kubectl run -i --tty busybox --image=busybox -- sh                                                # Run pod as interactive shell
+$ kubectl attach my-pod -i                                                                          # Attach to Running Container
+$ kubectl port-forward my-pod 5000:6000                                                             # Listen on port 5000 on the local machine and forward to port 6000 on my-pod
+$ kubectl exec my-pod -- ls /                                                                       # Run command in existing pod (1 container case)
+$ kubectl exec my-pod -c my-container -- ls /                                                       # Run command in existing pod (multi-container case)
+$ kubectl top pod POD_NAME --containers                                                             # Show metrics for a given pod and its containers
 
 
 # Interacting with Services:-
-$ kubectl get services                          									     # List all services in the namespace
-$ kubectl get services --sort-by=.metadata.name 									     # List Services Sorted by Name
-$ kubectl expose rc nginx --port=80 --target-port=8000								# Create a service for a replicated nginx, which serves on port 80 and connects to the containers on port 8000
-$ kubectl explain svc                       										        # Get the documentation for svc manifests
-$ kubectl exec <service> <command> [-c <container>]								  	# Execute command on container of service
+$ kubectl get services                                                                              # List all services in the namespace
+$ kubectl get services --sort-by=.metadata.name                                                     # List Services Sorted by Name
+$ kubectl expose rc nginx --port=80 --target-port=8000                                              # Create a service for a replicated nginx, which serves on port 80 and connects to the containers on port 8000
+$ kubectl explain svc                                                                               # Get the documentation for svc manifests
+$ kubectl exec <service> <command> [-c <container>]                                                 # Execute command on container of service
 
 
 # Interacting with ReplicationController:-
-$ kubectl get rc																                              # List all ReplicationController
-$ kubectl get rc --namespace="<namespace>"                 			# List a particular ReplicationController
-$ kubectl describe rc <name>               										        	# Describe ReplicationController
-$ kubectl explain rc														                          		# Get the documentation for ReplicationController
+$ kubectl get rc                                                                                    # List all ReplicationController
+$ kubectl get rc --namespace="<namespace>"                                                          # List a particular ReplicationController
+$ kubectl describe rc <name>                                                                        # Describe ReplicationController
+$ kubectl explain rc                                                                                # Get the documentation for ReplicationController
 
 
 # Interacting with Deployment:-
-$ kubectl get deployment															                       # List all deployment
-$ kubectl get deployment my-dep                 									     # List a particular deployment
-$ kubectl autoscale deployment foo --min=2 --max=10           # Auto scale a deployment "foo"
-$ kubectl set image deployment/Deployment tomcat=tomcat:6.0			# Update deployment
-$ kubectl rollout status deployment/Deployment										      # Status of deployement
-$ kubectl rollout undo deployment/Deployment –to-revision=2			# Rollback to previous version of deployment
+$ kubectl get deployment                                                                            # List all deployment
+$ kubectl get deployment my-dep                                                                     # List a particular deployment
+$ kubectl autoscale deployment foo --min=2 --max=10                                                 # Auto scale a deployment "foo"
+$ kubectl set image deployment/Deployment tomcat=tomcat:6.0                                         # Update deployment
+$ kubectl rollout status deployment/Deployment                                                      # Status of deployement
+$ kubectl rollout undo deployment/Deployment –to-revision=2                                         # Rollback to previous version of deployment
 
 
 # Interacting with Nodes:-
 $ kubectl get nodes																																								                                                                                                                   # List all node
 $ kubectl get nodes	-want																																					                                                                                                                # Watch node continuously																
 $ kubectl top nodes																																								                                                                                                                   # Metric of all nodes
+$ kubectl drain tomcat –force                                                                                                                                                 # Drain a node for maintenance purpose
 $ kubectl describe nodes my-node																														                                                                                                                # List all details of specified node i.e. verbose
 $ kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="ExternalIP")].address}'																					                                                          # Get ExternalIPs of all nodes
 $ JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}' && kubectl get nodes -o jsonpath="$JSONPATH" | grep "Ready=True"	# Check which nodes are ready
 
  
 # Interacting with Nodes and Cluster:-
-$ kubectl cordon my-node                                                			# Mark my-node as unschedulable
-$ kubectl drain my-node                                                 			# Drain my-node in preparation for maintenance
-$ kubectl uncordon my-node                                              			# Mark my-node as schedulable
-$ kubectl top node my-node                                              			# Show metrics for a given node
-$ kubectl cluster-info                                                  			# Display addresses of the master and services
-$ kubectl cluster-info dump                                             			# Dump current cluster state to stdout
-$ kubectl cluster-info dump --output-directory=/path/to/cluster-state   			# Dump current cluster state to /path/to/cluster-state
-$ kubectl taint nodes foo dedicated=special-user:NoSchedule							         # Allow master to run pod. If a taint with that key and effect already exists, its value is replaced as specified.
+$ kubectl cordon my-node                                                                           # Mark my-node as unschedulable
+$ kubectl drain my-node                                                                            # Drain my-node in preparation for maintenance
+$ kubectl uncordon my-node                                                                         # Mark my-node as schedulable
+$ kubectl top node my-node                                                                         # Show metrics for a given node
+$ kubectl cluster-info                                                                             # Display addresses of the master and services
+$ kubectl cluster-info dump                                                                        # Dump current cluster state to stdout
+$ kubectl cluster-info dump --output-directory=/path/to/cluster-state                              # Dump current cluster state to /path/to/cluster-state
+$ kubectl taint nodes foo dedicated=special-user:NoSchedule                                        # Allow master to run pod. If a taint with that key and effect already exists, its value is replaced as specified.
 
 
 # Interacting with Events:-
-$ kubectl get events																                                       # List all events
-$ kubectl get events --sort-by=.metadata.creationTimestamp						          	# List Events sorted by timestamp
+$ kubectl get events                                                                               # List all events
+$ kubectl get events --sort-by=.metadata.creationTimestamp                                         # List Events sorted by timestamp
 
 
 # Updating Resources:-
-$ kubectl rolling-update frontend-v1 -f frontend-v2.json           					# Rolling update pods of frontend-v1
-$ kubectl rolling-update frontend-v1 frontend-v2 --image=image:v2  					# Change the name of the resource and update the image
-$ kubectl rolling-update frontend --image=image:v2                 					# Update the pods image of frontend
-$ kubectl rolling-update frontend-v1 frontend-v2 --rollback        					# Abort existing rollout in progress
+$ kubectl rolling-update frontend-v1 -f frontend-v2.json                                           # Rolling update pods of frontend-v1
+$ kubectl rolling-update frontend-v1 frontend-v2 --image=image:v2                                  # Change the name of the resource and update the image
+$ kubectl rolling-update frontend --image=image:v2                                                 # Update the pods image of frontend
+$ kubectl rolling-update frontend-v1 frontend-v2 --rollback                                        # Abort existing rollout in progress
 
 
 # Scaling Resources:-
-$ kubectl scale --replicas=3 rc <name>												# Scale ReplicationController 
-$ kubectl scale --replicas=3 rs/foo                                 				# Scale a replicaset named 'foo' to 3
-$ kubectl scale --replicas=3 -f foo.yaml                            				# Scale a resource specified in "foo.yaml" to 3
-$ kubectl scale --current-replicas=2 --replicas=3 deployment/mysql  				# If the deployment named mysql's current size is 2, scale mysql to 3
-$ kubectl scale --replicas=5 rc/foo rc/bar rc/baz                   				# Scale multiple replication controllers
+$ kubectl scale --replicas=3 rc <name>                                                              # Scale ReplicationController 
+$ kubectl scale --replicas=3 rs/foo                                                                 # Scale a replicaset named 'foo' to 3
+$ kubectl scale --replicas=3 -f foo.yaml                                                            # Scale a resource specified in "foo.yaml" to 3
+$ kubectl scale --current-replicas=2 --replicas=3 deployment/mysql                                  # If the deployment named mysql's current size is 2, scale mysql to 3
+$ kubectl scale --replicas=5 rc/foo rc/bar rc/baz                                                   # Scale multiple replication controllers
 
 
 # Patching Resources:-
@@ -203,38 +204,39 @@ $ kubectl config current-context              														                    
 $ kubectl config use-context my-cluster-name  														                                           		# set the default context to my-cluster-name
 $ kubectl config view																					                                                              	# Show Merged kubeconfig settings.
 $ KUBECONFIG=~/.kube/config:~/.kube/kubconfig2 kubectl config view						                            					# Use multiple kubeconfig files at the same time and view merged config
+$ kubectl edit <Resource/Name | File Name)                                                               # Directly edit a resource which one can receive via the command line tool.
 $ kubectl edit svc/docker-registry                      										                                    			# Edit the service named docker-registry
 $ KUBE_EDITOR="nano" kubectl edit svc/docker-registry   											                                    		# Use an alternative editor
 $ kubectl cp <Files from source> <Files to Destinatiion>											                                    		# Copy files and directories to and from containers.
 $ kubectl cp /tmp/foo <some-pod>:/tmp/bar -c <specific-container>										                             	# Copy files and directories to and from containers.
 
 # Short-Hand Notation or Abbreviated alias
-certificatesigningrequests			csr
-componentstatuses					       cs
-configmaps							            cm
-customresourcedefinition			  crd, crds
-daemonsets							            ds
-deployments						           	deploy
-endpoints						             	ep
-events								               ev
-horizontalpodautoscalers		  	hpa
-ingresses							             ing
-limitranges							           limits
-namespaces							            ns
-networkpolicies						        netpol
-nodes								                no
-persistentvolumeclaims		   		pvc
-persistentvolumes				       	pv
-poddisruptionbudgets     				pdb	
-pods							                 	po
-podsecuritypolicies     					psp
-replicasets							           rs
-replicationcontrollers		   		rc
-resourcequotas					         	quota
-serviceaccount					         	sa
-services						              	svc
-statefulsets		           				sts
-storageclasses				         		sc
+certificatesigningrequests        csr
+componentstatuses                 cs
+configmaps                        cm
+customresourcedefinition          crd, crds
+daemonsets                        ds
+deployments                       deploy
+endpoints                         ep
+events                            ev
+horizontalpodautoscalers          hpa
+ingresses                         ing
+limitranges                       limits
+namespaces                        ns
+networkpolicies                   netpol
+nodes                             no
+persistentvolumeclaims            pvc
+persistentvolumes                 pv
+poddisruptionbudgets              pdb	
+pods                              po
+podsecuritypolicies               psp
+replicasets                       rs
+replicationcontrollers            rc
+resourcequotas                    quota
+serviceaccount                    sa
+services                          svc
+statefulsets                      sts
+storageclasses                    sc
 
 
 # Formatting output
@@ -242,15 +244,15 @@ To output details to your terminal window in a specific format, you can add eith
 
 
 # Output format	Description
--o=custom-columns=<spec>			Print a table using a comma separated list of custom columns
--o=custom-columns-file=<filename>	Print a table using the custom columns template in the <filename> file
--o=json								Output a JSON formatted API object
--o=jsonpath=<template>				Print the fields defined in a jsonpath expression
--o=jsonpath-file=<filename>			Print the fields defined by the jsonpath expression in the <filename> file
--o=name								Print only the resource name and nothing else
--o=wide								Output in the plain-text format with any additional information, and for pods, the node name is included
--o=yaml								Output a YAML formatted API object
-Kubectl	-v or --v					Output verbosity and debugging
+-o=custom-columns=<spec>                                                                                 Print a table using a comma separated list of custom columns
+-o=custom-columns-file=<filename>	                                                                       Print a table using the custom columns template in the <filename> file
+-o=json								                                                                                          Output a JSON formatted API object
+-o=jsonpath=<template>				                                                                               Print the fields defined in a jsonpath expression
+-o=jsonpath-file=<filename>                                                                              Print the fields defined by the jsonpath expression in the <filename> file
+-o=name                                                                                                  Print only the resource name and nothing else
+-o=wide                                                                                                  Output in the plain-text format with any additional information, and for pods, the node name is included
+-o=yaml                                                                                                  Output a YAML formatted API object
+Kubectl	-v or --v                                                                                        Output verbosity and debugging
 
 
 # Verbosity	Description
