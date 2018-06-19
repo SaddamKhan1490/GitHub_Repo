@@ -1,197 +1,86 @@
+Windows Search -> run -> cmd
+
+C:\Users\S771125>
+
+cd Documents\Softwares\NEO4J_HOME>bin\neo4j console
+
+Reset Password : neo4j@123
+
+==============================================================================================================================================================================================================
+NEO4J OFFICIAL DOCUMENTATION:-
+==============================
 
 CREATE (n)																								// Create single Node
-MATCH (n) return n 																						// Will return newly created Node
 CREATE (n),(m),(o),(p),(q)                          													// CREATE multiple Node
-Match (n) return n limit 5                          													// Will return first 5 Nodes
-
-MATCH (n) WHERE id(n)=1 Return n                    													// Will search and return the node with id = 1
-MATCH (n) WHERE id(n)=1 Return n                    													// Search using comparision <,<=,>,>=,<>
-MATCH (n) WHERE id(n) IN [5,6,1] Return n           													// Search and return all the node where ID lies within given range 
-MATCH (n) WHERE id(n)=1 DELETE n                    													// Delete the node whose internal id is 1
-MATCH (n) WHERE id(n) IN [5,6,1] DELETE n           													// Delete all the node where ID lies within given range 
-MATCH (n) DELETE n                                  													// Delete all the nodes in case there are NO existing relationships within given table
-DELETE Entire Database: 
-1> Stop neo4j server i.e. service neo4j stop; 2> Check status of neo4j server i.e. service neo4j status; 3> Delete the data directory i.e. rm -rf /var/lib/neo4j/data/*; 4> Start neo4j server again i.e. service neo4j start
-LABEL (Used to group set of nodes togather):
-1> Applied only on Nodes 2> Follow Camel-Casing to declare lable name 3> Cannot be applied to node which already has same lable
 CREATE (n:Person)																						// CREATEd node with Lable
-MATCH (n) WHERE n:Person Return n                   													// Search & Return all nodes with given Lable
 CREATE (n:Person:Indian)																				// CREATEd node with multiple Lable
-MATCH (n) WHERE n:Person:Indians Return n           													// Search & Return all nodes with both of given Lable
-MATCH (n) WHERE n:Person OR n:Indians Return n      													// Search & Return all nodes with either of given Lable
-MATCH (n) SET n:Person Return n                     													// Add label to all the existing nodes in database
-MATCH (n) SET n:Person:India Return n               													// Add multiple label to all the existing nodes in database
-MATCH (n) WHERE id(n)=1 SET n:Person Return n       													// Add label to specific node in given database
-MATCH (n) WHERE id(n) IN[1,2] SET n:Person Return n 													// Add label to specified nodes in given database
-
-MATCH (n) REMOVE n:Person Return n                  													// Remove Lables from Nodes NOT Nodes itself and must be used in conjunction with MATCH
-MATCH (n) REMOVE n:Person:Indian Return n           													// Remove Multiple Lables from Nodes NOT Nodes itself and must be used in conjunction with MATCH
-MATCH (n) WHERE id(n) IN [1,3,4] REMOVE n:Person Return n    											// Remove Lables from Specified Nodes NOT all Nodes and must be used in conjunction with MATCH
-MATCH (n) WHERE id(n) IN [1,3,4] REMOVE n:Person SET n:Employee Return n    							// UPDATE Lables of Specified Nodes NOT all Nodes and must be used in conjunction with MATCH
-
-MATCH (n) RETURN DISTINCT labels(n)																		// List ALL the Lables of DataBase
-MATCH (n) WHERE id(n)=1 RETURN DISTINCT labels(n)						    							// List ALL the Lables of DataBase for specified ID
-MATCH (n) RETURN DISTINCT count(labels(n))								    							// COUNT of ALL the Lables of DataBase
-MATCH (n) RETURN DISTINCT count(labels(n)),labels(n)													// COUNT & List of ALL the Lables of DataBase
-MATCH (n) WHERE n:Person:Indian DELETE(n)                                   							// Delete Node based on Lables
-
 CREATE (x:Person{name:"ABC", age:27, salary:19500}) RETURN n																		// CREATE Node with specified Properties
 CREATE (x:Person{name:"ABC", age:27, salary:19500, `Date of Birth`: "21-03-2013"}) RETURN n											// CREATE Node with Properties having Space
 CREATE (x:Person{name:"ABC", age:27, salary:19500.00, `Date of Birth`: "21-03-2013", Address :["h1","h2"]}) RETURN n				// CREATE Node with Properties having Space & Multiple datatypes i.e. String, Int, Float, Array of String[DataTypes must be homogeneous for all values within given array], etc...
 
+
+MATCH (n) Return n 																						// Will return newly created Node
+MATCH (n) Return n limit 5                          													// Will return first 5 Nodes
+MATCH (n) WHERE n:Person Return n                   													// Search & Return all nodes with given Lable
+MATCH (n) WHERE n:Person:Indians Return n           													// Search & Return all nodes with both of given Lable
+MATCH (n) WHERE n:Person OR n:Indians Return n      													// Search & Return all nodes with either of given Lable
+
+
+MATCH (n) WHERE id(n)=1 Return n                    													// Will search and return the node with id = 1
+MATCH (n) WHERE id(n)=1 Return n                    													// Search using comparision <,<=,>,>=,<>
+MATCH (n) WHERE id(n) IN [5,6,1] Return n           													// Search and return all the node where ID lies within given range 
 MATCH (n:Person{name:"ABC"}) Return n                                                                   // Return all the Nodes having Lable "Person & Property as "ABC"
 MATCH (n:Person{Address :["h1","h2"]}) Return n															// Return all the Nodes having Lable "Person & Property as "Address :["h1","h2"]" i.e. an array and order of the nodes sequence also must be same
 MATCH (n:Person) WHERE n.age > 25 AND (n.name="ABC" OR n.name="XYZ") Return n							// Logical Operator i.e. AND, OR, <>, >=, <=, etc...
 MATCH (n:Person) WHERE toInt(n.age) > 25 Return n														// Type Conversion
 MATCH (n:Person) WHERE n.age IN [25,27,28] Return n												    	// In case of string data will be case sensitive while performing comparision i.e. n.name IN ["ABC"] will NOT return result for n.name IN ["Abc"]
+
+
+MATCH (n) SET n:Person Return n                     													// Add label to all the existing nodes in database
+MATCH (n) SET n:Person:India Return n               													// Add multiple label to all the existing nodes in database
+MATCH (n) WHERE id(n)=1 SET n:Person Return n       													// Add label to specific node in given database
+MATCH (n) WHERE id(n) IN[1,2] SET n:Person Return n 													// Add label to specified nodes in given database
 MATCH (n:Person) WHERE n.name="ABC" SET n.name="Abc" Return n											// Update the property of Node
 MATCH (n:Person{name:"ABC"}) SET n.name="Abc" Return n													// Update name property of Node
 MATCH (n:Person{name:"ABC"}) SET n.name="Abc", n.age="28", n.salary=20500 Return n						// Update name-age-salary property of Node
 MATCH (n:Person{name:"ABC"}) SET n +={name:"Abc",age:"28",salary:20500} Return n						// Update name-age-salary property of Node
 MATCH (n) WHERE n.name:"ABC" SET n:Lable_Name Return n													// Add Lables to Nodes Matching Properties
 MATCH (gp{name:"ABC"}), (sl{name:"Abc"}) SET gp=sl Return gp,sl											// Copy all the data from one node to another
-
 MATCH (n:Person{name:"ABC"}) SET n.salary=NULL Return n													// Delete Salary Property from Node
 MATCH (n:Person) WHERE n.name="ABC" SET n.salary=NULL Return n											// Delete Salary Property from Node
+
+
+
+MATCH (n) REMOVE n:Person Return n                  													// Remove Lables from Nodes NOT Nodes itself and must be used in conjunction with MATCH
+MATCH (n) REMOVE n:Person:Indian Return n           													// Remove Multiple Lables from Nodes NOT Nodes itself and must be used in conjunction with MATCH
+MATCH (n) WHERE id(n) IN [1,3,4] REMOVE n:Person Return n    											// Remove Lables from Specified Nodes NOT all Nodes and must be used in conjunction with MATCH
+MATCH (n) WHERE id(n) IN [1,3,4] REMOVE n:Person SET n:Employee Return n    							// UPDATE Lables of Specified Nodes NOT all Nodes and must be used in conjunction with MATCH
 MATCH (n) REMOVE n.name Return n																		// Delete Name Property from ALL Node
 MATCH (n) WHERE n.salary<=20000 REMOVE n.name Return n													// Delete Name Property from ALL Node Where salary is less than 20000
+
+
+MATCH (n) RETURN DISTINCT labels(n)																		// List ALL the Lables of DataBase
+MATCH (n) WHERE id(n)=1 RETURN DISTINCT labels(n)						    							// List ALL the Lables of DataBase for specified ID
+MATCH (n) RETURN DISTINCT count(labels(n))								    							// COUNT of ALL the Lables of DataBase
+MATCH (n) RETURN DISTINCT count(labels(n)),labels(n)													// COUNT & List of ALL the Lables of DataBase
+
+
+DELETE (Return NODE, RELATIONSHIPS, and PROPERTIES):-
+-----------------------------------------------------
+MATCH (n) DELETE n  
+MATCH (n) DETACH DELETE n                                													// Delete all the nodes in case there are NO existing relationships within given table
+MATCH (n) WHERE id(n)=1 DELETE n                    													// Delete the node whose internal id is 1
+MATCH (n) WHERE id(n) IN [5,6,1] DELETE n           													// Delete all the node where ID lies within given range 
+MATCH (n) WHERE n:Person:Indian DELETE(n)                                   							// Delete Node based on Lables
 MATCH (n) WHERE n.salary<=20000 DELETE n																// Delete ALL nodes whose Salary is less than 20000
 
-==============================================================================================================================================================================================================
-Tutorials Point:-
-=================
- 
-CREATE NODES:-
---------------
-CREATE (n)																								
-MATCH (n) return n 																						
 
-CREATE (n :user) return n
-CREATE (Dhawan:person:player)
-CREATE (Dhawan:player{name: "Shikar Dhawan", YOB: 1985, POB: "Hyderabad"}),(Rohit:player{name: "Rohit Sharma", YOB: 1985, POB: "Delhi"}) RETURN Dhawan,Rohit
-
-CREATING RELATIONSHIPS-LABEL B/W NODES:
----------------------------------------
- A relationtion or lable can also have a property associated with it
- Relationships can be unidirectional or bi-directional
- There can exist 1-1, 1-N, N-N types of relationships
- 
- CREATE (ja:Student {name:'Jack'})
- CREATE (jm:Student {name:'James'})
- MATCH (ja:Student {name:'Jack'}),(jm:Student {name:'James'}) RETURN ja,jm
- 
- MATCH (ja:Student {name:'Jack'}),(jm:Student {name:'James'}) 
- CREATE (ja)-[r:FRIENDS {nickname:'Jimbo'}]->(jm)
- RETURN ja,jm
- 
- MATCH (ja:Student {name:'Jack'}),(jm:Student {name:'James'}) 
- CREATE (ja)<-[r:FRIENDS {nickname:'Jimbo'}]-(jm)
- RETURN ja,jm
- 
- MATCH (ja:Student {name:'Jack'}),(jm:Student {name:'James'}) 
- CREATE (ja)-[r:FRIENDS {nickname:'Jimbo'}]->(jm)
- CREATE (ja)<-[s:FRIENDS {nickname:'Jimbo'}]-(jm)
- RETURN ja,jm
-
-QUERY and Find RELATIONSHIP between existing NODE:-
-----------------------------------------------------
-
- MATCH (ja:Student {name:'Jack'})-[]->(jm:Student {name:'James'}) RETURN ja,jm
- MATCH (ja:Student {name:'Jack'})-[r:FRIENDS]->(jm:Student {name:'James'}) RETURN ja,jm
- MATCH (ja:Student {name:'Jack'})-[r:FRIENDS]-(jm:Student {name:'James'}) RETURN ja,jm
-
- MATCH (a:player), (b:Country) 
- WHERE a.name = "Shikar Dhawan" AND b.name = "India" 
- CREATE (a)-[r: BATSMAN_OF]->(b) 
- RETURN a,b 
- 
- MATCH (a:player), (b:Country) 
- WHERE a.name = "Shikar Dhawan" AND b.name = "India" 
- CREATE (a)-[r:BATSMAN_OF {Matches:5, Avg:90.75}]->(b)  
- RETURN a,b 
- 
 CREATE PATH (CREATE NODE & RELATIONSHIP at same time) i.e. Nested Relationships:-
 ---------------------------------------------------------------------------------
  CREATE p=(Dhawan {name:"Shikhar Dhawan"})-[:TOP_SCORRER_OF]->(Ind{name:"India"})-[:WINNER_OF]->(CT2013{name:"Champions Trophy 2013"}) 
  RETURN p
  
-MERGE i.e. CREATE & Merge:-
----------------------------
- CREATE (Dhawan:player{name: "Shikar Dhawan", YOB: 1985, POB: "Delhi"}) 
- CREATE (Ind:Country {name: "India"}) 
- CREATE (Dhawan)-[r:BATSMAN_OF]->(Ind) 
-
- MERGE (Jadeja:player) RETURN Jadeja 
-
- MERGE (CT2013:Tournament{name: "ICC Champions Trophy 2013"}) 
- RETURN CT2013, labels(CT2013)
-
- MERGE (Jadeja:player {name: "Ravindra Jadeja", YOB: 1988, POB: "NavagamGhed"}) 
- RETURN Jadeja 
-
- MERGE (Jadeja:player {name: "Ravindra Jadeja", YOB: 1988, POB: "NavagamGhed"}) 
- ON CREATE SET Jadeja.isCREATEd = "true" 
- ON MATCH SET Jadeja.isFound = "true" 
- RETURN Jadeja 
-
- MATCH (a:Country), (b:Tournament) 
-   WHERE a.name = "India" AND b.name = "ICC Champions Trophy 2013" 
-   MERGE (a)-[r:WINNERS_OF]->(b) 
- RETURN a, b 
-
-SET (add property to existing node or relationship or can add or update existing property):-
---------------------------------------------------------------------------------------------
- CREATE (Dhawan:player{name: "shikar Dhawan", YOB: 1985, POB: "Delhi"}) 
-
- MATCH (Dhawan:player{name: "shikar Dhawan", YOB: 1985, POB: "Delhi"}) 
- SET Dhawan.highestscore = 187 
- RETURN Dhawan
-
- CREATE (Jadeja:player {name: "Ravindra Jadeja", YOB: 1988, POB: "NavagamGhed"})
-
- MATCH (Jadeja:player {name: "Ravindra Jadeja", YOB: 1988, POB: "NavagamGhed"}) 
- SET Jadeja.POB = NULL 
- RETURN Jadeja 
-
- MATCH (Jadeja:player {name: "Ravindra Jadeja", YOB: 1988})  
- SET Jadeja.POB="NavagamGhed",Jadeja.HS="90" 
- RETURN Jadeja
-
- CREATE (Anderson {name: "James Anderson", YOB: 1982, POB: "Burnely"})
- MATCH (Anderson {name: "James Anderson", YOB: 1982, POB: "Burnely"}) 
- SET Anderson: player 
- RETURN Anderson 
-
- CREATE (Ishant {name: "Ishant Sharma", YOB: 1988, POB: "Delhi"}) 
- MATCH (Ishant {name: "Ishant Sharma", YOB: 1988, POB: "Delhi"}) 
- SET Ishant: player:person 
- RETURN Ishant
-
-DELETE :-
----------
- MATCH (n) DETACH DELETE n
- CREATE (Ishant:player {name: "Ishant Sharma", YOB: 1988, POB: "Delhi"}) 
-
- MATCH (Ishant:player {name: "Ishant Sharma", YOB: 1988, POB: "Delhi"}) 
- DETACH DELETE Ishant
-
- REMOVE (i.e. remove properties and labels from graph elements (Nodes or Relationships)):
-
- CREATE (Dhoni:player {name: "MahendraSingh Dhoni", YOB: 1981, POB: "Ranchi"})
-
- MATCH (Dhoni:player {name: "MahendraSingh Dhoni", YOB: 1981, POB: "Ranchi"}) 
- REMOVE Dhoni.POB 
- RETURN Dhoni 
-
- MATCH (Dhoni:player {name: "MahendraSingh Dhoni", YOB: 1981, POB: "Ranchi"}) 
- REMOVE Dhoni:player 
- RETURN Dhoni 
-
- CREATE (Ishant:player:person {name: "Ishant Sharma", YOB: 1988, POB: "Delhi"}) Return Ishant
- MATCH (Ishant:player:person {name: "Ishant Sharma", YOB: 1988, POB: "Delhi"}) 
- REMOVE Ishant:player:person 
- RETURN Ishant 
-
+ 
 FOREACH (update data):-
 -----------------------
  CREATE p = (Dhawan {name:"Shikar Dhawan"})-[:TOPSCORRER_OF]->(Ind{name: 
@@ -202,7 +91,8 @@ FOREACH (update data):-
    WHERE Dhawan.name = "Shikar Dhawan" AND CT2013.name = "Champions Trophy 2013" 
  FOREACH (n IN nodes(p)| SET n.marked = TRUE)
 
-MATCH (Retreive nodes):-
+ 
+ MATCH (Retreive nodes):-
 ------------------------
  CREATE (Dhoni:player {name: "MahendraSingh Dhoni", YOB: 1981, POB: "Ranchi"}) 
  CREATE (Ind:Country {name: "India", result: "Winners"}) 
@@ -220,6 +110,7 @@ MATCH (Retreive nodes):-
  MATCH (n:player) RETURN n 
  MATCH (Ind:Country {name: "India", result: "Winners"})<-[: TOP_SCORER_OF]-(n) RETURN n.name
 
+ 
 OPTIONAL MATCH (Fill Null on missing part else same as MATCH):-
 ---------------------------------------------------------------
  MATCH (a:Tornament {name: "ICC Champions Trophy 2013"}) 
@@ -405,3 +296,17 @@ LOAD DATA from FILE :-
  RETURN count(*);
 
 Neo.ClientError.Statement.ExternalResourceFailed: Couldn't load the external resource at: file:/C:/Users/S771125/Documents/Softwares/NEO4J_HOME/import/Users/S771125/Desktop/data.csv
+
+# DELETE Entire Database:-
+1> Stop neo4j server i.e. service neo4j stop
+2> Check status of neo4j server i.e. service neo4j status
+3> Delete the data directory i.e. rm -rf /var/lib/neo4j/data/*
+4> Start neo4j server again i.e. service neo4j start
+
+
+# LABEL (Used to group set of nodes togather):-
+1> Applied only on Nodes 
+2> Follow Camel-Casing to declare lable name 
+3> Cannot be applied to node which already has same lable
+
+
