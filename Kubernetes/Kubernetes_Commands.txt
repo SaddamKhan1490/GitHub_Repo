@@ -191,24 +191,24 @@ $ Kubectl Autocomplete
 $ Kubectl Context and Configuration
 
 # Kubectl Autocomplete:-
-$ source <(kubectl completion bash) 																		                                                   # setup autocomplete in bash, bash-completion package should be installed first.
-$ source <(kubectl completion zsh)  																		                                                   # setup autocomplete in zsh
+$ source <(kubectl completion bash)                                                                      # setup autocomplete in bash, bash-completion package should be installed first.
+$ source <(kubectl completion zsh)                                                                       # setup autocomplete in zsh
 # Kubectl Context and Configuration:-
-$ kubectl config view -o jsonpath='{.users[?(@.name == "e2e")].user.password}'							                   	# Get the password for the e2e user
-$ kubectl config set-credentials kubeuser/foo.kubernetes.com --username=kubeuser --password=kubepassword	# Add a new cluster to your kubeconf that supports basic auth
-$ kubectl config set-context gce --user=cluster-admin --namespace=foo && kubectl config use-context gce		# Set a context utilizing a specific username and namespace.
-$ kubectl config set PROPERTY_NAME PROPERTY_VALUE															                                         # Sets an individual value in kubeconfig file
-$ kubectl config unset PROPERTY_NAME PROPERTY_VALUE														                                       	# Unsets a specific component in kubectl.
-$ kubectl config use-context <Context Name>															                                             		# Sets the current context in kubectl file.
-$ kubectl config current-context              														                                           		# Display the current-context
-$ kubectl config use-context my-cluster-name  														                                           		# set the default context to my-cluster-name
-$ kubectl config view																					                                                              	# Show Merged kubeconfig settings.
-$ KUBECONFIG=~/.kube/config:~/.kube/kubconfig2 kubectl config view						                            					# Use multiple kubeconfig files at the same time and view merged config
+$ kubectl config view -o jsonpath='{.users[?(@.name == "e2e")].user.password}'                           # Get the password for the e2e user
+$ kubectl config set-credentials kubeuser/foo.kubernetes.com --username=kubeuser --password=kubepassword # Add a new cluster to your kubeconf that supports basic auth
+$ kubectl config set-context gce --user=cluster-admin --namespace=foo && kubectl config use-context gce  # Set a context utilizing a specific username and namespace.
+$ kubectl config set PROPERTY_NAME PROPERTY_VALUE                                                        # Sets an individual value in kubeconfig file
+$ kubectl config unset PROPERTY_NAME PROPERTY_VALUE                                                      # Unsets a specific component in kubectl.
+$ kubectl config use-context <Context Name>                                                              # Sets the current context in kubectl file.
+$ kubectl config current-context                                                                         # Display the current-context
+$ kubectl config use-context my-cluster-name                                                             # set the default context to my-cluster-name
+$ kubectl config view                                                                                    # Show Merged kubeconfig settings.
+$ KUBECONFIG=~/.kube/config:~/.kube/kubconfig2 kubectl config view                                       # Use multiple kubeconfig files at the same time and view merged config
 $ kubectl edit <Resource/Name | File Name)                                                               # Directly edit a resource which one can receive via the command line tool.
-$ kubectl edit svc/docker-registry                      										                                    			# Edit the service named docker-registry
-$ KUBE_EDITOR="nano" kubectl edit svc/docker-registry   											                                    		# Use an alternative editor
-$ kubectl cp <Files from source> <Files to Destinatiion>											                                    		# Copy files and directories to and from containers.
-$ kubectl cp /tmp/foo <some-pod>:/tmp/bar -c <specific-container>										                             	# Copy files and directories to and from containers.
+$ kubectl edit svc/docker-registry                                                                       # Edit the service named docker-registry
+$ KUBE_EDITOR="nano" kubectl edit svc/docker-registry                                                    # Use an alternative editor
+$ kubectl cp <Files from source> <Files to Destination>                                                  # Copy files and directories to and from containers.
+$ kubectl cp /tmp/foo <some-pod>:/tmp/bar -c <specific-container>                                        # Copy files and directories to and from containers.
 
 # Short-Hand Notation or Abbreviated alias
 certificatesigningrequests        csr
@@ -263,6 +263,6 @@ Kubectl	-v or --v                                                               
 --v=3                                                                                                    Extended information about changes.
 --v=4                                                                                                    Debug level verbosity.
 --v=6                                                                                                    Display requested resources.
---v=7								Display HTTP request headers.
---v=8								Display HTTP request contents.
---v=9								Display HTTP request contents without truncation of contents.
+--v=7                                                                                                    Display HTTP request headers.
+--v=8                                                                                                    Display HTTP request contents.
+--v=9                                                                                                    Display HTTP request contents without truncation of contents.
