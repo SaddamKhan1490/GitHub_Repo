@@ -1,0 +1,100 @@
+Step - 1 : Create a Dockerfile in order to create a Docker image from your application and tell Kubernetes to launch one or more instances of the image. Therefore, first step is to create a docker image out  Spring Boot app.
+
+FROM openjdk:8                                                              # download jdk from dockerhub
+
+ADD target/users-mysql.jar users-mysql.jar                                  # encorporate spring boot application jar
+
+EXPOSE 8086                                                                 # application port 
+
+ENTRYPOINT ["java", "-jar", "users-mysql.jar"]                              # execution command for app 
+
+$ docker build -t "spring-boot-mysql-app:v1" .                              # move to folder where Dockerfile is & Build Docker Image using Dockerfile in order to spin container. Here "." represents home directory of Dockerfile
+$ docker images                                                             # view the newly created image
+
+
+Step - 2 : Create a Deployment or ReplicationController for application to be scalable with desired configuration.
+
+apiVersion: apps/v1beta1                                                    # for versions before 1.8.0 use apps/v1beta1
+kind: Deployment                                                            # create deployment for pod
+metadata:
+  name: spring-boot-mysql-deployment
+spec:
+  selector:
+    matchLabels:
+      app: spring-boot-mysql-app
+  replicas: 3                                                               # tells deployment to run 3 pods matching the template
+  template:                                                                 # create pods using pod definition in this template
+    metadata:
+      labels:
+        app: spring-boot-mysql-app                                          # specify the lable
+    spec:
+      containers:
+      - name: spring-boot-mysql-app                                         # specify container name
+        image: spring-boot-mysql-app:v1                                     # specify name of your docker image here
+        ports:
+        - containerPort: 8080	                                              # deploy server on 8080
+          name: server
+        - containerPort: 8081                                               # deploy management on port 8081
+          name: management
+
+$ kubectl apply -f Deployment.yml	                                          # create deployment
+$ kubectl get deployment spring-boot-mysql-deployment                       # get details of your deployment
+$ kubectl get pods spring-boot-mysql-app                                    # get details of pod under deployment
+$ kubectl log	pod                                                           # verify log
+
+
+Step - 3 : Create a service in order to expose pods, which internally results in exposing our application on specified ports.
+
+apiVersion: apps/v1beta1                                                    # for versions before 1.8.0 use apps/v1beta1
+kind: Service                                                               # create service to expose our pod and make this service run on two different port
+metadata:
+  name: spring-boot-mysql-service
+spec:
+  ports:
+  - port: 8080                                                              # loadbalancer port 
+    targetPort: 8080                                                        # container port 
+    name: http                                                              # port name
+    protocol: TCP                                                           # supported protocol
+  - port: 8081                                                              # loadbalancer port 														
+    targetPort: 8081                                                        # container port 
+    name: management                                                        # port name
+	protocol: TCP                                                             # supported protocol
+  selector:
+    app: spring-boot-mysql-app
+  type: NodePort
+
+$ kubectl create -f ./Service.yaml                                          # create service
+$ kubectl get services                                                      # list all services in the namespace
+$ kubectl describe svc spring-boot-mysql-service                            # list all details of specified service
+
+
+Step - 4 : Create an Ingress to manages external access to the services in a cluster, typically HTTP. Ingress works almost as a service with type LoadBalancer, with set of custom routing rules and can provide load balancing, SSL termination and name-based virtual hosting.
+
+apiVersion: extensions/v1beta1                                              # for versions before 1.8.0 use apps/v1beta1
+kind: Ingress	                                                              # create ingress to manage external access to the services in a cluster, typically HTTP.
+metadata:
+  name: spring-boot-mysql-ingress
+  annotations:
+    kubernetes.io/ingress.allow-http: "false"                               # ingress to allow only HTTPS connections
+spec:
+  tls:
+  - secretName: your-tls-secret                                             # secret which holds our ssl certificates data for the ingress to access
+  backend:
+    serviceName: spring-boot-mysql-service                                  # service to ingress
+    servicePort: 8080                                                       # port for ingress service
+
+
+Step - 5 : Create a Secret to holds our SSL certificates data in order to access the ingress.
+
+apiVersion: extensions/v1beta1                                              # for versions before 1.8.0 use apps/v1beta1
+kind: Secret                                                                # create secret to holds our ssl certificates data for the ingress to access 
+data:
+  tls.crt:                                                                  # base64 hash of your cert
+  tls.key:                                                                  # base64 hash of your key
+metadata:
+  name: your-tls-secret                                                     # name of our secret
+  namespace: default
+type: Opaque
+
+	
+#After applying all configs we can check the external ip of our app with the '$kubectl get ingress spring-boot-mysql-ingress' command
