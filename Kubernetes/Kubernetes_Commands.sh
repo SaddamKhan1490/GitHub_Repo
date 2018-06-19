@@ -1,5 +1,6 @@
 # Commands Classification based on Purpose or Usage:-
 
+
 1> Commands for Creating Objects (service-pod-replicationcontrollers-deployment)
 2> Commands for Viewing or Finding Resources (service-pod-replicationcontrollers-deployment)
 3> Commands for Updating Resources (service-pod-replicationcontrollers-deployment)
