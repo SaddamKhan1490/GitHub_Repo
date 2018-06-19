@@ -1,35 +1,3 @@
-# Create BusyBox with sleep interval inside Pod
-$ cat <<EOF | kubectl create -f -
-apiVersion: v1
-kind: Pod
-metadata:
-  name: busybox-sleep
-spec:
-  containers:
-  - name: busybox
-    image: busybox
-    args:
-    - sleep
-    - "1000000"
-EOF
-
-
-# Create BusyBox without sleep interval inside Pod
-$ cat <<EOF | kubectl create -f -
-apiVersion: v2
-kind: Pod
-metadata:
-  name: busybox-sleep-less
-spec:
-  containers:
-  - name: busybox
-    image: busybox
-    args:
-    - sleep
-    - "1000"
-EOF
-
-
 # Create Pod
 $ cat <<EOF | kubectl create -f -
 apiVersion: v3
@@ -107,24 +75,7 @@ spec:
             - containerPort: 80
 EOF
 
-       
-# Create a Service 
-$ cat <<EOF | kubectl create -f -
-apiVersion: v7
-kind: Service
-metadata:
-  name: nginx-service1
 
-spec:
-  ports:
-    - port: 8000
-      targetPort: 80
-      protocol: TCP
-  selector:
-    app: nginx
-EOF
- 
- 
 # Create a Deployment 
 $ cat <<EOF | kubectl create -f -
 apiVersion: v8
@@ -145,6 +96,40 @@ spec:
         - containerPort: 80	
 EOF
 
+       
+# Create a Service 
+$ cat <<EOF | kubectl create -f -
+apiVersion: v7
+kind: Service
+metadata:
+  name: nginx-service1
+
+spec:
+  ports:
+    - port: 8000
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app: nginx
+EOF
+
+
+# Create a Ingress 
+$ cat <<EOF | kubectl create -f -
+apiVersion: extensions/v1beta1                                              
+kind: Ingress	                                                              
+metadata:
+  name: spring-boot-mysql-ingress
+  annotations:
+    kubernetes.io/ingress.allow-http: "false"                               
+spec:
+  tls:
+  - secretName: your-tls-secret                                             
+  backend:
+    serviceName: spring-boot-mysql-service                                  
+    servicePort: 8080                                                       
+EOF
+
 
 # Create a Secret with several keys
 $ cat <<EOF | kubectl create -f -
@@ -156,6 +141,38 @@ type: Opaque
 data:
   password: $(echo -n "s33msi4" | base64)
   username: $(echo -n "jane" | base64)
+EOF
+
+
+# Create BusyBox with sleep interval inside Pod
+$ cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox-sleep
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    args:
+    - sleep
+    - "1000000"
+EOF
+
+
+# Create BusyBox without sleep interval inside Pod
+$ cat <<EOF | kubectl create -f -
+apiVersion: v2
+kind: Pod
+metadata:
+  name: busybox-sleep-less
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    args:
+    - sleep
+    - "1000"
 EOF
 
 
