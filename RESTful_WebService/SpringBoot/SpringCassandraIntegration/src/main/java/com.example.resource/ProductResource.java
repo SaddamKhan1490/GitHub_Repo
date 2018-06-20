@@ -5,8 +5,8 @@
   
 package com.example.resource;
 
-import com.example.document.Product;
-import com.example.document.ProductForm;
+import com.example.model.Product;
+import com.example.model.ProductForm;
 import com.example.services.ProductService;
 import com.example.converters.ProductToProductForm;
 import org.springframework.beans.factory.annotation.Autowired;
