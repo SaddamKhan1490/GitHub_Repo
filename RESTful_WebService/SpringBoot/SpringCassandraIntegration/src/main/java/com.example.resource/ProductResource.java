@@ -5,7 +5,7 @@
   
 package com.example.resource;
 
-import com.example.model.Product;
+import com.example.document.Product;
 import com.example.model.ProductForm;
 import com.example.services.ProductService;
 import com.example.converters.ProductToProductForm;
