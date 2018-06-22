@@ -1,0 +1,145 @@
+VPC:
+
+VPC ==> Single INTERNET Gateway ==> ROUTE TABLE ==> NACL ==>  Subnet-1;Subnet-2;...;Subnet-x
+
+M/C-1 to M/C-2:-
+================
+
+1> Single VPC two Machine both are using same VPC & IGW Public
+VPC -> IGW -> M/C1 -> ssh M/C2
+          |
+           -> M/C2 -> ssh M/C1
+
+2> Single VPC two Machine both are using same VPC but one using IGW i.e. Public & other using NAT_Gateway(allocate public IP for given private IP) i.e. Private
+VPC -> IGW -> M/C1(pub) -> ssh M/C2
+   |
+    -> NAT -> M/C2(pvt) -> ssh M/C2 -> ping M/C1 -> copy private key of M/C2 to M/C1 -> ssh M/C1
+
+3> Two VPC two Machine both are using different VPC & IGW Public
+VPC1 -> IGW1 -> M/C1 -> Peering(adding extra route in subnet i.e. one for IGW & other for PCX) -> ssh M/C2
+|
+VPC2 -> IGW2 -> M/C2 -> Peering(adding extra route in subnet i.e. one for IGW & other for PCX) -> ssh M/C1
+
+--------------------------------------------------------------
+
+
+Region (CIDR-Block) [availability zone1, availability zone2, availability zone3, availability zone4]
+Now can allocate IP address to region based on its availability zone
+
+IP_Address : 192.168.0.0/16
+Classification
+Network_Address : 192.168
+Host Address : 0.0
+Subnet : 16
+
+Number of IP_Address for given Subnet Mask = 2(32-subnet_mask) ex-> 192.168.0.0/16 ; 2(32-16) = 2(16) = 65535
+
+Restrict IP_Address per region(256) i.e. subnet = 256 = 2(8) .'. subnet = 2(32-8) = 24
+
+256 Subnet per region and 256 IP_Address per Subnet
+
+NOTE: Key is specific to region and not to subnet or machine
+      VPC can be associated to max of one and only one Internet Gateway & can be associated with N-number of routing tables
+      CIDR blocks are specific to region & subnet i.e. one for region (192.168.0.0/16) and other for subnet (192.168.0.0/24) i.e. CIDR of region must be wider than that of subnet
+      We can create N-number of subnets until and unless we have consumed all the IP_Address
+      While creating subnet by default 5 IP addresses will be reserved:- 1> Network Address i.e. 192.168.0.0 ; 2> Router i.e. Network_Address i.e. 192.168.0.1 ; 3> DNS (fully qualified domain name ex-> www.google.com) i.e. 192.168.0.2 ; 4> Future use i.e. 192.168.0.3 ; 5> Broadcast IP address i.e. 192.168.0.255
+
+Service -> VPC -> Create IP_Address -> IPv4 CIDR (192.168.0.0/16) -> Submit
+
+Service -> VPC -> Intenet Gateway -> Create Gateway -> name + (action -> attach to VPC) -> Submit
+
+Service -> VPC -> Route Table -> Create Route Table -> name -> Submit
+
+Service -> VPC -> Subnet (Data Centre) -> Create subnet -> name + ip -> Submit
+
+Route Table -> Associate subnet
+Route Table -> Associate route 0.0.0.0
+Launch Server -> Service -> EC2 -> Step-3 -> select your VPC as part of Netwrok + enable subnet-> goto advance detail option -> type
+"#!/bin/bash
+
+useradd dvsbatch3
+yum install httpd -y
+chkconfig httpd on
+service httpd restart"
+
+-> Step-5 Select Security Group -> Launch Instance
+--------------------------------------------------------------
+NOTE: We can edit security group by selecting EC2 -> Security Group -> Select Group -> Edit i.e. inbound /outbound/ etc..
+      SSH to AMI using Public IP of machine running under EC2 -> If config -> route - n
+      Detach Internet Gateway and again try to access the machine you will -> unable to connect
+--------------------------------------------------------------
+Peer Connection VPC: Connecting two different region using Single Key
+====================
+ Create connection between VPC's which are part and parcel of same region
+
+ VPC1 (192.168.0.0/16) -> IGW -> RT -> VPC1_subnet(192.168.0.0/24) -> EC2(VPC1_Server) -> Login to each of the instances using there IPV4 addresses (34.236.154.23)
+ VPC2 (10.15.0.0/16) -> IGW -> RT -> VPC1_subnet(10.15.0.0/24) -> EC2(VPC2_Server) -> Login to each of the instances using there IPV4 addresses (52.72.32.166)
+
+ /etc/sysconfig/network
+
+ VPC -> Peering connections -> Create Peering connection -> vpc1 to vpc2 -> select vpc1 & select peer i.e. vpc2 -> Submit
+
+Open VPC in another terminal -> Peering Connection -> Actions -> Accept/Reject the request
+VPC -> Route Table -> add one more route -> 10.15.0.0/16 & select network as "PCX intesd of IGW" -> via "vpc1 to vpc2  peering" & sae
+VPC -> Route Table -> add one more route -> 192.168.0.0/16 & select network as "PCX intesd of IGW" -> via "vpc1 to vpc2  peering" & sae
+
+SSH to both EC2 machine's i.e. 1 & 2, in two different terminal & get IP's of both machines using ifconfig
+then, try to logging into both the machines from same instance using private IP of other machine
+
+192_Series_Region : chmod 600 /Users/z0022q4/Desktop/Learning/first_key_pair.pem; scp -i /Users/z0022q4/Desktop/Learning/first_key_pair.pem /Users/z0022q4/Desktop/Learning/first_key_pair.pem ec2-user@34.236.154.23:/home/ec2-user/; ssh -i /home/ec2-user/first_key_pair.pem ec2-user@10.10.0.189
+10_Series_Region  : chmod 600 /Users/z0022q4/Desktop/Learning/first_key_pair.pem; scp -i /Users/z0022q4/Desktop/Learning/first_key_pair.pem /Users/z0022q4/Desktop/Learning/first_key_pair.pem ec2-user@52.72.32.166:/home/ec2-user/; ssh -i /home/ec2-user/first_key_pair.pem ec2-user@192.168.0.238
+
+ NOTE : never delete default VPC else will not be able to access the region
+        peering can be done cross accounts as well
+        every peering will have unique ID
+
+Case : Jump Host Login
+======================
+VPC -> IGW -> RT(Public IP) -> Subnet -> EC2 (192.168.10.15)
+VPC -> IGW -> RT(Private IP) -> Subnet -> EC2 (192.168.10.20)
+ So here we can access the private machine using private ip of public machine
+
+ Service -> VPC -> Create IP_Address -> IPv4 CIDR (192.168.0.0/16) -> Submit
+
+ Service -> VPC -> Intenet Gateway -> Create Gateway -> name + (action -> attach to VPC) -> Submit
+
+ Service -> VPC -> Route Table -> Create Route Table -> name -> Submit
+
+ Service -> VPC -> Subnet (Data Centre) -> Create subnet -> name + ip -> Submit
+
+ Now attach all to perform inter communication RT -> subnet add subnet & save  -> route add 0.0.0.0/0 + select IGW & save
+
+ Launch Server -> Service -> EC2 -> Step-3 -> select your VPC as part of Netwrok + Auto Assign IP Address : enable subnet-> goto advance detail option -> type
+ "#!/bin/bash
+
+ useradd dvsbatch3
+ yum install httpd -y
+ chkconfig httpd on
+ service httpd restart"
+
+ -> Step-5 Select Security Group -> Launch Instance
+
+ VPC -> IGW -> RT(Private IP) -> Subnet -> EC2 (192.168.10.20)
+
+ Now we will create new server using our previously created Image & will SSH using Private IP as Public IP will not be accessible
+
+Create Route Table
+Create Subnet & associate VPC
+Launch EC2 Instance
+
+SSH using Public IP of this instance and will not be accessible
+SSH using Private IP from machine with which you logged in using Public IP will not be accessible. So need to copy .pem file of private machine to that of public machines under .ssh folder
+
+
+VPC NAT Gateway: Web (Public) to RDS(RDBMS) (Private where this private will be replaced by Public using NAT)
+================
+
+NOTE : NAT will convert the Private_IP to Public_IP which is specific to region not the machine or subnet & this Private_IP will be fixed for a machine once its allocated.
+VPC : NAT-VPC
+IGW : NAT-VPC
+RT1 : NAT_VPC -> Subnet_1 : NAT_VPC : CIDR-192.168.0.0/24 -> RT1 : 0.0.0.0/0 - IGW : SubnetAssociation - Subnet_1 -> EC2_Pub_Instance -> ssh -i first_key_pair.pem ec2-user@18.232.168.94
+RT2 : NAT_VPC -> Subnet_2 : NAT_VPC : CIDR-192.168.10.0/24 ->  NAT_Gateway : Create NAT_Gateway -> Subnet - Select Pvt_Subnet i.e. Subnet_2 : Allocate Elastic IP - Create IP -> RT1 : 0.0.0.0/0 - NAT_Gateway : SubnetAssociation - Subnet_2 -> EC2_Pvt_Instance  -> This instance cant be accessed from outside world either with IPV4 or with IPV6
+So connect to Public EC2 Instance i.e.EC2_Pub_Instance & test accessibility of Private EC2 Instance i.e. EC2_Pvt_Instance : ping 192.168.10.77
+Now copy private key of EC2_Pub_Instance to EC2_Pvt_Instance : scp -i /Users/z0022q4/Desktop/Learning/first_key_pair.pem /Users/z0022q4/Desktop/Learning/first_key_pair.pem ec2-user@18.232.168.94:/home/ec2-user/
+Connect to EC2_Pvt_Instance from logged in EC2_Pub_Instance : ssh -i /home/ec2-user/first_key_pair.pem ec2-user@192.168.10.77
+
