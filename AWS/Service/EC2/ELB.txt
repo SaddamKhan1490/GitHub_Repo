@@ -1,0 +1,16 @@
+Elastic Load Balancer : To avoid Server crash when request on server increases the upper limit of number of requests which can be handled by Server by redirecting the traffic to free server thereby doing the load balancing
+
+
+USER -> LB -> EC2_1 -> Install HTTPD(yum install httpd -y) -> make index.html(vim index.html) -> httpd service restart -> now copy the public IP4 of RDS EC2 instance and hit URL in browser -> "Hellow Welcome to AWS Class" will be printed
+          |
+           -> EC2_2 -> Install HTTPD(yum install httpd -y) -> make index.html(vim index.html) -> httpd service restart -> now copy the public IP4 of RDS EC2 instance and hit URL in browser -> "Hellow Welcome to AWS Class" will be printed
+
+
+# Now HIT Load Balancer on specified port
+EC2 -> LoadBalancer -> Create LBS -> Classic LBS -> step-3 & step-4(Health Check -> ping protocol : TCP -> Port : 80 -> Response Time : 5) step - 5 : add EC2 instance => Submit
+
+#Once LBS is created -> select LBS -> copy DNS of LBS -> paste it in browser url -> and in case if servers associated with LBS are in running state then we will get appropriate response specific to instances running under LBS
+#In case if one machine is down then all traffic of the LBS will be transferred and distributed within rest of the Server
+#Apache : Helps to bring our services on to the web browser
+
+
