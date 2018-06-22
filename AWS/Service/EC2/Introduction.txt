@@ -1,0 +1,80 @@
+# Service Classification:-
+
+IAAC : Infrastructure as a Code. Ex : Automation & Orchestration as Service
+PAAS : Platform as a Service. Ex : Database i.e. Hardware as Service
+SAAS : Software as a Service. Ex : Java, ELK, Tomcat i.e. Softawre as Service
+
+
+# IAM Creation
+https://444167551360.signin.aws.amazon.com/console
+IAM -> Users -> Add User (with existing policies(user1) + add user to group (user2)+ copy permission from existing reason (user3))
+IAM -> Users -> Attach Policies -> EC2 + S3 + red_stream_submit
+IAM -> Users -> user1 -> manage password
+IAM -> Users -> Groups -> RDS -> Policy -> Add user to this group
+IAM -> Account Setting (Below User) -> Security -> Specify Password Constraint
+NOTE : user created from user who was created using group will now be getting attached to that particular group
+
+
+# IAM User List:-
+user1
+123@user1
+user2
+123@user2
+user3
+123@user3
+
+
+#  AMI Overview:-
+AMI : Amazon Machine Image (OS)
+CentOS = RedHat = Amazon Linux
+Min & Default Disk Space : 8 GB
+Max Disk Space : 30 GB
+Max Number of Instances : 30/8 = 3-Instances
+Custom TCP : specify port i.e. [8080] or [8080,4040] or [8080 - 9200]
+Port Range per Server : [0 - 2(**32)]
+TCP : 22 {SSH which has replaced Telnet}
+SFTP : 21 / 20
+Security Group: Restrict & Privilege Access Level & Classify accordingly
+
+
+# EC2 Instance Creation:-
+EC2 -> Launch Instance -> Select m/c -> Specify Configurations -> Generate Key-Pairs (Download Pem File) -> Launch
+EC2 -> Launch Instance -> Amazon Linux -> t2.micro Specify Configurations -> Generate Key-Pairs (Download Pem File) -> Launch
+Monitor Instance : EC2 Console -> Instances -> Select Instances -> RC -> Instance State -> Terminate/Stop/Reboot/Start
+
+
+# Default UserNames:-
+Default User for AMI : ec2-user
+Default User for CentOS : centos
+Default User for Ununtu : ununtu
+
+
+# Generate SSH Keys using Putty KeyGen i.e. public & private key
+Putty -> Connection -> Data -> ec2-user1
+Putty -> SSH -> auth -> private key file for authentication -> select private key i.e. .ppk -> Specify IP_Address
+NOTE : Every .pem file have associated (public & private i.e. file with extention .ppk) key and is used for inter machine communication
+
+
+# Inter Machine communication:-
+[sudo su -] -> redirected to root user i.e. here it will be EC2-User
+
+ssh -i first_key_pair.pem ec2-user@107.23.149.243
+generate your machine KeyGen "ssh-keygen -t rsa -C z0022q4@target.com" | ssh to ami_machine | cd .ssh of ami_machine | copy your local machine Public_RSA_KEY and paste it in .ssh folder of ami_machine
+
+NOTE : New Key_Gen will overwrite the previous or existing one
+       Make sure .pem file has permission set to 600
+
+
+# User Specific Login: ssh first_ami
+cd .ssh
+vi config
+Host first_ami
+   HostName 10.60.139.215
+   User cloud-user
+   UserKnownHostsFile=/dev/null
+   CheckHostIP=no
+   StrictHostKeyChecking=no
+
+FQDN : Fully Qualified Domain Name i.e. www.google.com or IP_Address
+PORT : Port works in correspondence to protocols i.e. TCP, SSH, etc...
+
