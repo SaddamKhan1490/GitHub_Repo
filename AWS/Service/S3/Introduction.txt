@@ -1,0 +1,28 @@
+================================================================================================================================================================
+S3 : Simple Storage Service
+================================================================================================================================================================
+
+Online bulk storage(i.e. auto-scaling storage) service to share the data across the entire world (On web data can be transfered from anywhere to anywhere)
+File System Type of files which are stored un S3 : S3FS
+S3 single basic intance size : 256  TB
+
+# Create S3 Bucket:-
+Service -> S3 -> Create Bucket :: Name - Unique_ Identifier(ex -> temp_s3_111) : Region - Nearest_ Region(Ex -> US East (N. Virginia) i.e. nearness is taken into account with reference to place where our service our running)
+
+# Upload file in S3 Bucket:-
+Select S3_Bucket Instance -> Upload -> Select file that needs to get uploaded
+S3_Bucket -> Select your respective S3_Bucket -> Select File -> : overview -> get details of file which is uploaded (ex -> public URL, file size, etc...
+S3_Bucket -> Select your respective S3_Bucket -> Select File -> : permission -> public access -> read & write access -> Now select the S3_bucket URL(similar to HDFS_Path and appended with AWS_IP_Addres i.e. /AWS_IP_Addres/HDFS_Path/File_Name) and try accessing form browser : will get the content displayed over the browser
+S3_Bucket -> Select your respective S3_Bucket -> Select File -> : properties -> version - enable version -> upload the same file with different content (corrupt)-> select file -> select version (show) -> can roll back to the previous version
+
+# S3_LifeCycle:-
+30 days unused (S3_Bucket - Standard)-> 90 day unused (Freeze - Standard-IA) -> 365 days unused (Glacier)-> Delete Permanently
+
+S3 -> Select Bucket -> Select File (hover) -> Management -> LifeCycle -> Define LifeCycle of this file which is stored under S3 Bucket
+
+# Storage Cost:-
+Cost -> Storage (Directly Proportional to Number of Storage Days)
+    |
+     -> Retrieval  (Inversely Proportional to Number of Storage Days)
+     
+================================================================================================================================================================
