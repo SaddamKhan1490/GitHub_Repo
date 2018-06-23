@@ -1,5 +1,4 @@
 ================================================================================================================================================================
-
 # VPC: Virtual Private Cloud
 ================================================================================================================================================================
 
@@ -119,7 +118,6 @@ Peer Connection VPC: Connecting two different region using Single Key
          Every peering will have unique ID
 
 ================================================================================================================================================================
-
 Case : Jump Host Login to access the private machine using private ip of public machine
 ================================================================================================================================================================
 
@@ -175,7 +173,7 @@ IGW : NAT-VPC
 RT1 : NAT_VPC -> Subnet_1 : NAT_VPC : CIDR-192.168.0.0/24 -> RT1 : 0.0.0.0/0 - IGW : SubnetAssociation - Subnet_1 -> EC2_Pub_Instance -> ssh -i first_key_pair.pem ec2-user@18.232.168.94
 
 RT2 : NAT_VPC -> Subnet_2 : NAT_VPC : CIDR-192.168.10.0/24 ->  NAT_Gateway : Create NAT_Gateway -> Subnet - Select Pvt_Subnet i.e. Subnet_2 : Allocate Elastic IP - Create IP -> RT1 : 0.0.0.0/0 - NAT_Gateway : SubnetAssociation - Subnet_2 -> EC2_Pvt_Instance  -> This instance cant be accessed from outside world either with IPV4 or with IPV6
-.So connect to Public EC2 Instance i.e.EC2_Pub_Instance & test accessibility of Private EC2 Instance i.e. EC2_Pvt_Instance : ping 192.168.10.77
+So connect to Public EC2 Instance i.e.EC2_Pub_Instance & test accessibility of Private EC2 Instance i.e. EC2_Pvt_Instance : ping 192.168.10.77
 
 Now copy private key of EC2_Pub_Instance to EC2_Pvt_Instance : scp -i /Users/UserName/Desktop/Learning/first_key_pair.pem /Users/UserName/Desktop/Learning/first_key_pair.pem ec2-user@18.232.168.94:/home/ec2-user/
 
