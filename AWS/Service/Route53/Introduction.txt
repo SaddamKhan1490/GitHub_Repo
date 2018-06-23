@@ -1,0 +1,40 @@
+================================================================================================================================================================
+Amazon Route 53 : Used to manage DNS by purchasing server and integrating thing to remove traditional approach of maintaining separate server as DNS
+================================================================================================================================================================
+
+Port : 53 (Domain Naming Service) : Ex -> www.google.com
+IP_Address --matched--> name of my website (ex-> http://www.mysite.com) : so here "www.mysite.com" is the DNS for this website and its running on port 80-> Which we need to purchase from host (ex-> GoDaddy, HostGator, etc...) inorder to host our application over the web i.e. internet
+So here we can conclude that host actually hosts our application over the web or internet using DNS server i.e. maps our local machine IP_Address to that of DNS server IP_Address && put abstraction over the IP_Address i.e. assign name
+
+# Ex:-
+Launch EC2 Instance : Name - Slave -> SSH to slave instance -> ping master : No Response -> ping master_machine with its ip_address : Success
+Launch EC2 Instance : Name - Master -> SSH to master instance  -> ping slave : No Response -> ping slave_machine with its ip_address : Success
+
+# Create HOST File : vim /etc/hosts
+Public_IP_Address_Master master
+Public_IP_Address_Slave slave1
+
+# Problem with HOST File : Host File concept holds good for limited set of names but get troublesome & risky as size of host_file increases, therefore in-order to overcome this what we do is allocate a dedicated server as DNS server
+
+# Create Configuration for DNS : vim /etc/hosts
+DNS Server : vim /etc/resetv.conf
+Map the IP_Address with HostName
+
+# NS LookUp : Used to retrieve DNS from IP and vice-versa
+1> Forward LookUp
+nslookup google.com  #Note : Here will keep getting different address at any point of time reason being www.google.com is not Machine in actual rather is a Load Balancer
+Name    : google.com
+Address : 172.217.14.78
+
+2> Backward LookUp
+nslookup 172.217.14.78  #Note : Here will keep getting different address at any point of time reason being www.google.com is not Machine in actual rather is a Load Balancer
+Name    : google.com
+Address : 172.217.14.78
+
+# Pre-Requisite : Here we need in to install and configure DNS Server instance on each of our machine
+
+# Create Route 53:-
+Service -> Route 53 -> Domain Name Registeration -> Select_Domain_Name : unique_name && hide the DNS IP && complete the Registeration process & Submit done
+Give -> IPV4_Address & ELB -> Routing Policy : simple & Save
+
+================================================================================================================================================================
