@@ -1,0 +1,29 @@
+================================================================================================================================================================
+RDS : Relational database made available as part of Service which is made available using FQDN
+================================================================================================================================================================
+
+# DynamoDB : NoSQL of Amazon and it stores data in the form of JSON records
+
+# RDS Instance Class : Hardware Database offered as Service i.e. an independent EC2 machine dedicated as Database i.e. Database installed on AMI with Amazons Linux machine as its base OS
+
+
+# Creat RDS Instance:-
+
+Service -> RDS -> Launch DB Instance -> Free Tier Eligibility only -> Select Database Engine (MYSQL)
+
+# Specify DB Details:-
+
+Instance Specification -> DBEngineVersion -> DNInstanceClass -> Multi-AZ Deployment : No -> Storage Type : General Purpose (SSD) -> Allocated Storage : 20
+
+DB Instance Identifier : Username - admin & Password - admin123 & Confirm Password - admin123
+
+RDS_Instances -> Select you RDS instance i.e. TestDB1 -> Select Security Group :: Inbound : Edit : Custom TCP - 0.0.0.0/0 & Save &&  Outbound : Edit : Alltraffic - 0.0.0.0/0 & Save -> Submit
+
+Create EC2 instance -> sudo su root -> install respective database driver package ex: "yum install mysql client package || yum install mysql -client || yum install mysql -server"-> verify installation of MySQL : /var/lib/mysql/ || service --status-all|grep -i mysql -> To connect to remote MySQL database type in EC2 console -> mysql -h complete.database.web.address -P 3306 -u admin -p password (ex ->  'mysql -h testdb1.cjgz6rpbmipk.us-east-1.rds.amazonaws.com -P 3306 -u admin -padmin123 # NOTE : Here no space is allowed between the "-p && actual password i.e. '-padmin123' NOT '-p admin123'"') -> "start triggering SQL command" -> mysql> shell will be launched -> Start using database ex : show databases; use database; show tables; etc...
+
+
+#NOTE:
+      1> MAC : Download MySQL Client (sudo hdiutil mount mysql-5.0.37-osx10.4-i686.dmg) and Install (https://slaptijack.com/system-administration/installing-mysql-on-mac-os-x-via-terminal/) & Hit below command from terminal:-
+      2> Network & Security -> VPC -> Subnet : default -> Publicly Accessible : Yes -> Availability Zone : No Preference -> VPC Security Group -> Create Security Group
+
+================================================================================================================================================================
