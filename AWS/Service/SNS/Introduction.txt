@@ -1,0 +1,15 @@
+================================================================================================================================================================
+SNS : Used for sending emails based on event or state to respective Endpoints or Clients
+================================================================================================================================================================
+
+
+# Send Email Notification:-
+Service -> Simple Notification Service -> Dashboard -> Create Topic :: Topic_Name - Topic_1 & Display Name - ALERT -> Create Subscription :: Proctocal - Email & Endpoint - xxxxx@gmail.com & Submit -> Switch to Inbox of respective Email Address - Confirm Subscription
+
+# Send SMS Notification:-
+Service -> Simple Notification Service -> Dashboard -> Publish Message / Publish Text Message -> SMS :: Message Type - Promotional & Number - +91 999999999 & Message - Hi Welcome to AWS SNS service  & Sender_ID - XXXX1403 & Submit
+
+
+NOTE : Similarly we can create notification based on Event-Logs-Metrics for any AWS Service.
+
+================================================================================================================================================================
