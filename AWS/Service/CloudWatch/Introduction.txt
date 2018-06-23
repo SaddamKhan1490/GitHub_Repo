@@ -1,0 +1,15 @@
+================================================================================================================================================================
+CloudWatch : Service that allows to monitor the various instances of AWS
+================================================================================================================================================================
+
+
+# EC2 Instances State Dashboard:-
+Service -> CloudWatch -> Dashboard -> Create Dashboard :: Dashboard_Name - Dashboard1 & Submit -> Add Widget :: Select Graph Type - Line Graph & Submit -> Under All Metric Option :: Select Respective Metric - EC2 & Select Per Instance Metric - Polt the All the Instance on X-axis and do customisation of Graph as per Need -> Create Widget & Submit -> Save The Dashboard
+
+# EC2 Instances Alarm Dashboard:-
+Service -> CloudWatch -> Dashboard -> Create Alarm :: Select Metric - EC2 & Select CPU Utilisation under the all the available option available under the EC2 option under Metric option & Select Duration i.e. from - to & min - max -> Next -> Define Alarm :: Name -> Alarm1 && Description -> Alarm_EC2_CPU_Utilisation && Whenever CPU Utilization is >= 80 -> Additional Settings :: Treat Missing Data as : Bad/missing/good/ignore -> Action :: Whenever this alarm is - State is Alarm && Send Notification to - Select options which are available from the SNS (ex -> Send Email or SMS Alert, etc...)-> Create Alarm && Submit
+
+
+NOTE : Similarly we can monitor and prepare dashboards of Event-Logs-Metrics for any associated AWS Service.
+
+================================================================================================================================================================
