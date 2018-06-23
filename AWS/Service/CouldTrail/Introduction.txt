@@ -1,0 +1,15 @@
+================================================================================================================================================================
+CloudTrail : Used to get Logging History for respective User i.e. IAM
+================================================================================================================================================================
+
+
+Service -> CloudTrail -> Dashboard(Shows Top 5 recent actions)
+                     |
+                      -> Event History(List All Action performed by respective user)
+                     |
+                      -> Create Trail(Create your own custom trail)
+                      
+
+NOTE : Here we can monitor Event Logs for any AWS User-Group-Service.
+
+================================================================================================================================================================
