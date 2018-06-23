@@ -31,10 +31,11 @@ nslookup 172.217.14.78  #Note : Here will keep getting different address at any 
 Name    : google.com
 Address : 172.217.14.78
 
-# Pre-Requisite : Here we need in to install and configure DNS Server instance on each of our machine
-
 # Create Route 53:-
 Service -> Route 53 -> Domain Name Registeration -> Select_Domain_Name : unique_name && hide the DNS IP && complete the Registeration process & Submit done
 Give -> IPV4_Address & ELB -> Routing Policy : simple & Save
+
+# Pre-Requisite : Here we need in to install and configure DNS Server instance on each of our machine
+
 
 ================================================================================================================================================================
