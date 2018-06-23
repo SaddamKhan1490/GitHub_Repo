@@ -2,6 +2,7 @@
 Amazon Route 53 : Used to manage DNS by purchasing server and integrating thing to remove traditional approach of maintaining separate server as DNS
 ================================================================================================================================================================
 
+
 Port : 53 (Domain Naming Service) : Ex -> www.google.com
 IP_Address --matched--> name of my website (ex-> http://www.mysite.com) : so here "www.mysite.com" is the DNS for this website and its running on port 80-> Which we need to purchase from host (ex-> GoDaddy, HostGator, etc...) inorder to host our application over the web i.e. internet
 So here we can conclude that host actually hosts our application over the web or internet using DNS server i.e. maps our local machine IP_Address to that of DNS server IP_Address && put abstraction over the IP_Address i.e. assign name
