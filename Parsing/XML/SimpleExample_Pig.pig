@@ -30,7 +30,7 @@
 
 -- 1> Parsing using Regular Expression : Here using the XMLLoader() in piggy bank UDF to load the xml, so ensure that Piggy Bank UDF is registered.  Then I am using regular expression to parse the XML.
 
-	REGISTER piggybank.jar
+	 REGISTER piggybank.jar
 	 A =  LOAD ‘/user/test/books.xml’ using org.apache.pig.piggybank.storage.XMLLoader(‘BOOK’) as (x:chararray);
 	 B = foreach A GENERATE FLATTEN(REGEX_EXTRACT_ALL(x,‘<BOOK>\\s*<TITLE>(.*)</TITLE>\\s*<AUTHOR>(.*)</AUTHOR>\\s*<COUNTRY>(.*)</COUNTRY>\\s*<COMPANY>(.*)</COMPANY>\\s*<PRICE>(.*)</PRICE>\\s*<YEAR>(.*)</YEAR>\\s*</BOOK>’));
 	 dump B;
