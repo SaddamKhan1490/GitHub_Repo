@@ -1,16 +1,39 @@
+-- Parse simple JSON:-
 
-atp_prod_loc_thld_e = load '/user/test/input_files_dir/*' using JsonLoader('product_id:chararray,threshold_setting:chararray,location_id:int,threshold_pickup_walkin_reserve:int,threshold_ship_walkin_reserve:int,published_timestamp:chararray');
+-- I/P : {"emp_id":100000101,"emp_name":"aaaaaaa","address":"H No 10, xyz street","dept":"technology","salary":1000000,"doj":"2020-01-01"} 
+simple_json_dataframe = LOAD '/user/test/input_files_dir/*' using JsonLoader('emp_id:int,emp_name:chararray,address:chararray,dept:chararray,salary:int,doj:chararray');
 rmf /user/test/output_files_dir/;
-STORE atp_prod_loc_thld_e INTO '/user/test/output_files_dir/' using PigStorage ('|');
+STORE simple_json_dataframe INTO '/user/test/output_files_dir/' using PigStorage ('|');
+
+-- O/P : 
+100000101|aaaaaaa|H No 10, xyz street|technology|1000000|2020-01-01
 
 
-atp_prod_thld_output_e= load '/user/test/input_files_dir/*' using JsonLoader('department_id:int,class_id:int,item_id:int,threshold_setting:chararray,threshold_quantity:int,threshold:(H:int,L:int,M:int),published_timestamp:chararray');
-atp_prod_thld_e = foreach atp_prod_thld_output_e generate department_id,class_id,item_id,threshold_setting, threshold_quantity, flatten(threshold), published_timestamp;
+
+-- Parse nested JSON:-
+
+-- I/P : {"emp_id":100000101,"emp_name":"aaaaaaa","location_continent":{"asia":5000,"america":3000,"europe":2000),"dept":"technology","salary":1000000,"doj":"2020-01-01"}
+
+dataframe_temp = LOAD '/user/test/input_files_dir/*' using JsonLoader('emp_id:int,emp_name:chararray,location_continent:(asia:int,america:int,europe:int),dept:chararray,salary:int,doj:chararray');
+nested_json_dataframe = foreach dataframe_temp generate emp_id,emp_name,flatten(location_continent), dept, salary, doj;
 rmf /user/test/output_files_dir/;
-STORE atp_prod_thld_e INTO '/user/test/output_files_dir/' using PigStorage (',');
+STORE nested_json_dataframe INTO '/user/test/output_files_dir/' using PigStorage (',');
+
+-- O/P : 
+100000101|aaaaaaa|5000|3000|2000|technology|1000000|2020-01-01
 
 
-atp_loc_thld_output_e = load '/user/test/input_files_dir/*' using JsonLoader('threshold_group:chararray, threshold_factor:int, threshold_minimum:int, threshold_maximum:int, location_ids:{t:(i:int)}, published_timestamp:chararray');
-atp_loc_thld_e = foreach atp_loc_thld_output_e generate threshold_group,threshold_factor,threshold_minimum,threshold_maximum, flatten(location_ids), published_timestamp;
+
+-- Parse JSON with Array:-
+
+-- I/P : {"emp_id":100000101,"emp_name":"aaaaaaa","location_ids":[1001, 2001, 3001],"dept":"technology","salary":1000000,"doj":"2020-01-01"}
+
+dataframe_temp = LOAD '/user/test/input_files_dir/*' using JsonLoader('emp_id:int,emp_name:chararray,location_ids:{t:(i:int)},dept:chararray,salary:int,doj:chararray');
+nested_array_json_dataframe = foreach dataframe_temp generate emp_id,emp_name, flatten(location_ids), dept, salary, doj;
 rmf /user/test/output_files_dir/;
-STORE atp_loc_thld_e INTO '/user/test/output_files_dir/' using PigStorage ('|');
+STORE nested_array_json_dataframe INTO '/user/test/output_files_dir/' using PigStorage ('|');
+
+-- O/P : 
+100000101|aaaaaaa|1001|technology|1000000|2020-01-01
+100000101|aaaaaaa|2001|technology|1000000|2020-01-01
+100000101|aaaaaaa|3001|technology|1000000|2020-01-01
