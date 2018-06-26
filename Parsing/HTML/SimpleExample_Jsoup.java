@@ -18,8 +18,8 @@ public class HTML_Parser {
     public static void main(String[] args) throws IOException {
     	
     	
-    	// Read Hardcoded HTML and Parse using Jsoup
-		String html = "<html><head><title>First parse</title></head>"
+    	    // Read Hardcoded HTML and Parse using Jsoup
+	    String html = "<html><head><title>First parse</title></head>"
 				  + "<body><p>Parsed HTML into a doc.</p>"
 				  + "<a>Parsed HTML into a doc.</a></body></html>";
 	
@@ -33,7 +33,7 @@ public class HTML_Parser {
 			System.out.println("Hardcoded_Head:-"+ "\n" + head_content);
 		
 			    
-		// Read HTML_File and Parse using Jsoup
+	    // Read HTML_File and Parse using Jsoup
 	    Validate.isTrue(args.length == 1, "usage: supply file to fetch");
 	    String file = args[0];
 	    System.out.println(file); 
@@ -59,7 +59,7 @@ public class HTML_Parser {
 			System.out.println("File_Head:-"+  "\n" +head_html_file);
 		
 			    
-		// Read HTML_URL and Parse using Jsoup
+	// Read HTML_URL and Parse using Jsoup
         Validate.isTrue(args.length == 1, "usage: supply url to fetch");
         String url = args[0];
         System.out.println(url);
