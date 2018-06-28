@@ -49,20 +49,27 @@ print("=========================================================================
 
 
 # Read XML from file and Parse
-with open('test_data.json', encoding='utf-8') as f:								        # Here, store the above hardcoded JSON inside file "test_data.json"
-    json_file_df = json.load(f.read())
+with open('test_data.xml', encoding='utf-8') as f:								        # Here, store the above hardcoded JSON inside file "test_data.json"
+    tree_file = objectify.fromstring(f.read())
 
 print("===========================================================================")
-print (tree.xml_root.attrib["module_id"])                                                # Print 'module_id' of <xml_root/> tag                                         
+print (tree_file.xml_root.attrib["module_id"])                                                # Print 'module_id' of <xml_root/> tag                                         
 print("===========================================================================")
-print (tree.xml_root.xml_first_sub_root.city.attrib["data"])                           # Print 'data' of <city/> tag, which is present under <xml_first_sub_root/> tag, which is further present under <xml_root/> tag                                 
+print (tree_file.xml_root.xml_first_sub_root.city.attrib["data"])                           # Print 'data' of <city/> tag, which is present under <xml_first_sub_root/> tag, which is further present under <xml_root/> tag                                 
 print("===========================================================================")
-print (tree.xml_root.xml_first_sub_root.postal_code.attrib["data"])                    # Print 'data' of <postal_code/> tag, which is present under <xml_first_sub_root/> tag, which is further present under <xml_root/> tag                                       
+print (tree_file.xml_root.xml_first_sub_root.postal_code.attrib["data"])                    # Print 'data' of <postal_code/> tag, which is present under <xml_first_sub_root/> tag, which is further present under <xml_root/> tag                                       
 print("===========================================================================")
 
 #########################################################################################################################################################################
 Output :-
 #########################################################################################################################################################################
+===========================================================================
+0
+===========================================================================
+Mountain View, CA
+===========================================================================
+94043
+===========================================================================
 ===========================================================================
 0
 ===========================================================================
