@@ -11,7 +11,6 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import confusion_matrix
 
-
 # Import the Race.txt file into Python
 data = pd.read_csv('Race.txt', sep=',')
 
@@ -42,3 +41,4 @@ prediction = clf.predict(X_test)
 
 cm = confusion_matrix(prediction, Y_test)
 print cm
+
