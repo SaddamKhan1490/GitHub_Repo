@@ -6,4 +6,4 @@ AWS's version of virtual computers emulate most of the attributes of a real comp
 
 AWS system also virtualizes its console I/O (keyboard, display, and mouse), allowing AWS subscribers to connect to their AWS system using a modern browser. The browser acts as a window into the virtual computer, letting subscribers log-in, configure and use their virtual systems just as they would a real physical computer. 
 
-Purpose of this repository is to explore various Services of AWS with help of examples
+Purpose of this repository is to explore various Services of AWS with help of examples.
